@@ -140,15 +140,21 @@ export function Home() {
             <div className="instrument-rule" />
 
             <div className="phase-legend">
-              <div>
-                <span className="phase-index mono">01</span>
+              <div className="phase-legend-item">
+                <div className="phase-legend-header">
+                  <span className="phase-index mono">PHASE 01</span>
+                  <span className="phase-tag mono">30:00</span>
+                </div>
                 <strong>Find the signal.</strong>
-                <p>30 minutes. Build a clear mental model from raw primary sources.</p>
+                <p>Build a clear architectural mental model from raw primary sources under time pressure.</p>
               </div>
-              <div>
-                <span className="phase-index mono">02</span>
+              <div className="phase-legend-item">
+                <div className="phase-legend-header">
+                  <span className="phase-index mono">PHASE 02</span>
+                  <span className="phase-tag mono">05:00</span>
+                </div>
                 <strong>Make it make sense.</strong>
-                <p>5 minutes. Explain it simply without buzzwords on video.</p>
+                <p>Synthesize and deliver a concise, jargon-free pitch on camera before the clock expires.</p>
               </div>
             </div>
 
