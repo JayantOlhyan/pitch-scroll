@@ -1374,10 +1374,59 @@ main {
   padding: 10px 8px;
 }
 
+.filter-legend {
+  margin: 20px 0 16px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.filter-legend h4 {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+
+.filter-legend-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.legend-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+}
+
+.legend-pill:hover,
+.legend-pill.active {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--line-light);
+  color: #fff;
+}
+
+.legend-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
 .filter-note {
   border-top: 1px solid var(--line);
   padding-top: 24px;
-  margin-top: 28px;
+  margin-top: 20px;
 }
 
 .filter-note > span {

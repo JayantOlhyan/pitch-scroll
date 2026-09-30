@@ -80,6 +80,46 @@ export function Library({ initialCategory = '' }: { initialCategory?: string }) 
             </label>
           ))}
 
+          <div className="filter-legend">
+            <h4 className="mono muted">Domain Key</h4>
+            <div className="filter-legend-grid">
+              {[
+                { name: 'AI', color: '#38bdf8' },
+                { name: 'Dev Tools', color: '#c084fc' },
+                { name: 'Infra', color: '#22d3ee' },
+                { name: 'OSS', color: '#34d399' },
+                { name: 'Systems', color: '#818cf8' },
+                { name: 'Security', color: '#2dd4bf' },
+              ].map((item) => {
+                const fullCat =
+                  item.name === 'Dev Tools'
+                    ? 'Developer Tools'
+                    : item.name === 'Infra'
+                    ? 'Infrastructure'
+                    : item.name === 'OSS'
+                    ? 'Open Source'
+                    : item.name === 'Systems'
+                    ? 'Engineering Systems'
+                    : item.name === 'Security'
+                    ? 'Cybersecurity'
+                    : item.name;
+                const active = category === fullCat;
+                return (
+                  <button
+                    key={item.name}
+                    type="button"
+                    className={`legend-pill ${active ? 'active' : ''}`}
+                    onClick={() => setCategory(active ? '' : fullCat)}
+                    title={`Filter by ${item.name}`}
+                  >
+                    <span className="legend-dot" style={{ backgroundColor: item.color }} />
+                    <span>{item.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           <button
             className="quiet"
             onClick={() => {
@@ -126,8 +166,23 @@ export function Library({ initialCategory = '' }: { initialCategory?: string }) 
 
           {!list.length && (
             <div className="empty">
-              <h2>No matching challenges</h2>
-              <p>Try another search or reset the filters.</p>
+              <h2>No matching challenges found</h2>
+              <p>We couldn’t find any case studies matching your criteria. Try searching for broader terms or clearing active filters.</p>
+              <button
+                type="button"
+                className="button primary small"
+                style={{ marginTop: 12 }}
+                onClick={() => {
+                  setSearch('');
+                  setCategory('');
+                  setType('');
+                  setDifficulty('');
+                  setIndustry('');
+                  setStatus('');
+                }}
+              >
+                Clear all filters
+              </button>
             </div>
           )}
         </div>
