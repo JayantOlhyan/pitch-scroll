@@ -3488,6 +3488,46 @@ blockquote {
   border-color: var(--orange);
 }
 
+.activity-grid > div.high-activity {
+  background: #ff8555;
+  border-color: #ffa07a;
+  box-shadow: 0 0 6px rgba(255, 100, 44, 0.4);
+}
+
+.activity-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.activity-scale-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.scale-box {
+  width: 12px;
+  height: 12px;
+  border: 1px solid #283731;
+  background: #141c19;
+  border-radius: 2px;
+}
+
+.scale-box.done {
+  background: var(--orange);
+  border-color: var(--orange);
+}
+
+.scale-box.high {
+  background: #ff8555;
+  border-color: #ffa07a;
+}
+
 .dashboard-charts {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -3496,8 +3536,8 @@ blockquote {
 
 .chart-row {
   display: grid;
-  grid-template-columns: 150px 1fr 30px;
-  gap: 16px;
+  grid-template-columns: 140px 1fr 75px;
+  gap: 14px;
   align-items: center;
   margin-top: 20px;
 }
@@ -3511,6 +3551,7 @@ blockquote {
   font: 12px var(--mono);
   text-align: right;
   color: #fff;
+  white-space: nowrap;
 }
 
 /* Admin */
