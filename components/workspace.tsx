@@ -6,13 +6,14 @@ import {
   BookOpen,
   CheckCheck,
   FileText,
-  Maximize2,
   Pause,
   Play,
-  Minimize2,
   Smartphone,
   Tv,
   AlertCircle,
+  Expand,
+  Shrink,
+  Film,
 } from 'lucide-react';
 import { useApp } from '@/hooks/use-app';
 import { Session, sections } from '@/types';
@@ -52,12 +53,19 @@ export function Workspace({ session: s }: { session: Session }) {
   const [tab, setTab] = useState('Problem');
   const [panel, setPanel] = useState('notes');
   const [end, setEnd] = useState(false);
+  const [fullscreen, setFullscreen] = useState(false);
 
   const p = state.preferences;
   const pitch = s.phase === 'pitch';
   const left = remaining(s, now);
   const checked = s.checklist.filter(Boolean).length;
   const catStyle = getCategoryStyle(s.challenge.category);
+
+  useEffect(() => {
+    const onFsChange = () => setFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', onFsChange);
+    return () => document.removeEventListener('fullscreenchange', onFsChange);
+  }, []);
 
   useEffect(() => {
     const target = s.phase === 'research' ? 'research' : s.phase === 'pitch' ? 'pitch' : 'result';
@@ -73,6 +81,14 @@ export function Workspace({ session: s }: { session: Session }) {
     else if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
   };
 
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen?.().catch(() => {});
+    } else {
+      document.exitFullscreen?.().catch(() => {});
+    }
+  };
+
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if ((e.target as HTMLElement)?.closest('input,textarea,select,[contenteditable]') || e.metaKey || e.ctrlKey || e.altKey)
@@ -81,9 +97,13 @@ export function Workspace({ session: s }: { session: Session }) {
         e.preventDefault();
         editSession(s.id, (x) => pause(advance(x)));
       }
-      if (e.key.toLowerCase() === 'f') {
+      if (e.key.toLowerCase() === 'f' && !e.shiftKey) {
         e.preventDefault();
         toggleCinematic();
+      }
+      if (e.key.toLowerCase() === 'f' && e.shiftKey) {
+        e.preventDefault();
+        toggleFullscreen();
       }
       if (e.key === 'Escape') {
         setPrefs({ cinematic: false, recording: 'off' });
@@ -111,13 +131,23 @@ export function Workspace({ session: s }: { session: Session }) {
         </div>
 
         <div className="row toolbar-right">
+          {/* Fullscreen Toggle */}
+          <button
+            className={`quiet toolbar-btn ${fullscreen ? 'active' : ''}`}
+            onClick={toggleFullscreen}
+            title="Toggle full screen window (Hotkey: Shift+F)"
+          >
+            {fullscreen ? <Shrink size={15} /> : <Expand size={15} />}
+            <span>{fullscreen ? 'Exit Full' : 'Fullscreen'}</span>
+          </button>
+
           {/* Cinematic Mode Toggle */}
           <button
             className={`quiet toolbar-btn ${p.cinematic ? 'active' : ''}`}
             onClick={toggleCinematic}
             title="Toggle distraction-free cinematic mode (Hotkey: F)"
           >
-            {p.cinematic ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+            <Film size={15} />
             <span>Cinematic</span>
           </button>
 
@@ -413,7 +443,7 @@ export function Workspace({ session: s }: { session: Session }) {
           {pitch ? '05' : '30'} MINUTE / {pitch ? 'PITCH' : 'RESEARCH'} RUN
         </span>
         <span className="mono muted shortcuts-help">
-          <kbd>Space</kbd> pause · <kbd>M</kbd> sound · <kbd>F</kbd> cinematic · <kbd>Esc</kbd> exit
+          <kbd>Shift+F</kbd> full screen · <kbd>F</kbd> cinematic · <kbd>Space</kbd> pause · <kbd>M</kbd> sound · <kbd>Esc</kbd> exit
         </span>
         <span className="mono">{checked}/10 questions understood</span>
       </div>
