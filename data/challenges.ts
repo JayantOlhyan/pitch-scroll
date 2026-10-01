@@ -21,6 +21,13 @@ const groups: [string,string,string,Row[]][] = [
 ['DeepSeek','Hard','Examine model efficiency, mixture-of-experts design, and open model distribution.','https://github.com/deepseek-ai'],
 ['Ollama','Medium','Explore local inference, model packaging, and hardware constraints.','https://ollama.com'],
 ['Stable Diffusion','Hard','Investigate diffusion, conditioning, and an open image-generation ecosystem.','https://github.com/CompVis/stable-diffusion'],
+['Groq','Hard','Explore custom LPU architecture, SRAM memory bandwidth, and deterministic inference latency.','https://groq.com'],
+['Together AI','Hard','Investigate decentralized model training, custom GPU clusters, and fast inference compilation.','https://www.together.ai'],
+['Scale AI','Medium','Evaluate data labeling pipelines, RLHF human feedback loops, and enterprise AI evaluation.','https://scale.com'],
+['OpenRouter','Medium','Explore unified LLM routing, token arbitrage, failover fallback logic, and API aggregation.','https://openrouter.ai'],
+['Replit','Medium','Investigate cloud development environments, collaborative containers, and AI agent integration.','https://replit.com'],
+['Windsurf','Medium','Explore AI coding cascade flows, IDE architecture, and reactive codebase context indexing.','https://codeium.com/windsurf'],
+['Lovable','Medium','Investigate prompt-to-fullstack application generation, sandboxed execution, and code export.','https://lovable.dev'],
 ]],
 ['Developer Tools','Product','Software development',[
 ['GitHub','Medium','Explore repository hosting, collaboration, CI, and developer network effects.','https://docs.github.com'],
@@ -37,6 +44,11 @@ const groups: [string,string,string,Row[]][] = [
 ['Redis','Hard','Explore in-memory structures, persistence tradeoffs, and cache invalidation.','https://redis.io/docs'],
 ['MongoDB','Medium','Evaluate document modeling, indexing, replication, and managed database economics.','https://www.mongodb.com/docs'],
 ['Sentry','Medium','Trace how errors, distributed traces, and source maps become actionable debugging.','https://docs.sentry.io'],
+['Neon','Hard','Investigate serverless Postgres, separation of storage and compute, and copy-on-write branching.','https://neon.tech/docs'],
+['PlanetScale','Hard','Explore Vitess horizontal MySQL sharding, zero-downtime schema migrations, and edge pooling.','https://planetscale.com/docs'],
+['Railway','Medium','Investigate continuous deployment, ephemeral container orchestration, and developer ergonomics.','https://docs.railway.app'],
+['Render','Medium','Explore zero-maintenance cloud hosting, managed services, and migration from legacy PaaS.','https://render.com/docs'],
+['PostHog','Medium','Investigate product analytics, session recording, feature flags, and self-hosted telemetry.','https://posthog.com/docs'],
 ]],
 ['Consumer Tech','Company','Consumer internet',[
 ['Spotify','Medium','Explore music licensing, discovery, retention, and two-sided marketplace economics.','https://www.spotify.com'],
@@ -51,6 +63,11 @@ const groups: [string,string,string,Row[]][] = [
 ['Netflix','Hard','Investigate content investment, streaming delivery, and subscription retention.','https://about.netflix.com'],
 ['Tinder','Medium','Examine matching, marketplace balance, safety, and subscription incentives.','https://www.tinder.com'],
 ['WhatsApp','Medium','Explore messaging reliability, end-to-end encryption, and business messaging.','https://www.whatsapp.com'],
+['YouTube','Insane','Examine global video recommendation graphs, creator revenue sharing, and watch-time dynamics.','https://www.youtube.com/howyoutubeworks'],
+['Google Maps App','Insane','Investigate planetary geospatial graphs, street-view inference, live traffic estimation, and routing.','https://mapsplatform.google.com'],
+['Google Photos','Hard','Explore face clustering, semantic image indexing, vector similarity search, and automated compression.','https://blog.google/products/photos'],
+['Twitch','Hard','Investigate low-latency live video ingestion, chat room fan-out, and creator tipping economies.','https://www.twitch.tv'],
+['Substack','Medium','Explore subscription newsletters, direct writer monetization, and recommendation loops.','https://substack.com'],
 ]],
 ['Indian Tech','Startup','India',[
 ['Zerodha','Medium','Explore discount brokerage, bootstrapping, and the architecture of retail trading.','https://zerodha.com'],
@@ -67,6 +84,11 @@ const groups: [string,string,string,Row[]][] = [
 ['Paytm','Hard','Investigate payment acceptance, merchant distribution, and financial-service partnerships.','https://paytm.com'],
 ['Nykaa','Medium','Explore beauty retail, inventory ownership, brand trust, and omnichannel commerce.','https://www.nykaa.com'],
 ['Freshworks','Medium','Evaluate product-led enterprise software and international distribution from India.','https://www.freshworks.com'],
+['OYO','Hard','Investigate budget hotel aggregation, dynamic pricing algorithms, and property onboarding.','https://www.oyorooms.com'],
+['PolicyBazaar','Medium','Explore insurance comparison marketplaces, lead conversion economics, and regulatory compliance.','https://www.policybazaar.com'],
+['Dream11','Hard','Investigate fantasy sports legality, real-time leaderboard calculations for millions, and deposits.','https://www.dream11.com'],
+['MPL','Hard','Explore real-time multiplayer mobile gaming, esports tournament distribution, and payout security.','https://www.mpl.live'],
+['Ola Electric','Hard','Investigate vertically integrated electric scooter manufacturing, batteries, and charging networks.','https://www.olaelectric.com'],
 ]],
 ['Infrastructure','Infrastructure','Cloud computing',[
 ['AWS','Insane','Map compute, storage, networking, and the economics of cloud primitives.','https://docs.aws.amazon.com'],
@@ -81,6 +103,10 @@ const groups: [string,string,string,Row[]][] = [
 ['Cloudflare Workers','Hard','Evaluate isolates, edge execution, storage placement, and distributed latency.','https://developers.cloudflare.com/workers/'],
 ['ClickHouse','Hard','Investigate column-oriented storage, compression, and real-time analytics.','https://clickhouse.com/docs'],
 ['DuckDB','Medium','Explore embedded analytical databases, vectorized execution, and local data workflows.','https://duckdb.org/docs/'],
+['Amazon S3','Insane','Examine object storage durability, eventual consistency, prefix sharding, and bit-rot protection.','https://docs.aws.amazon.com/s3/'],
+['Amazon DynamoDB','Insane','Investigate single-digit millisecond NoSQL scaling, partition keys, Paxos, and global tables.','https://docs.aws.amazon.com/dynamodb/'],
+['Envoy Proxy','Hard','Explore service mesh data planes, dynamic discovery services, filter chains, and traffic shadowing.','https://www.envoyproxy.io/docs'],
+['CockroachDB','Insane','Investigate distributed SQL, Spanner-inspired consensus, multi-raft replication, and serializability.','https://www.cockroachlabs.com/docs/'],
 ]],
 ['Open Source','Open Source','Software',[
 ['Linux','Insane','Explore kernel responsibilities, process isolation, and distributed maintenance.','https://www.kernel.org'],
@@ -97,6 +123,10 @@ const groups: [string,string,string,Row[]][] = [
 ['Git','Hard','Investigate content-addressed storage, commit graphs, merges, and distributed collaboration.','https://git-scm.com/doc'],
 ['SQLite','Medium','Explore embedded storage, transactions, journaling, and the serverless database model.','https://www.sqlite.org/docs.html'],
 ['Blender','Hard','Evaluate open-source funding, 3D workflows, and professional ecosystem adoption.','https://www.blender.org'],
+['Tailwind CSS','Medium','Explore utility-first styling, JIT compiler performance, CSS bundle purging, and design tokens.','https://tailwindcss.com/docs'],
+['TypeScript','Hard','Investigate structural subtyping, type erasure, language server protocol, and incremental compilation.','https://www.typescriptlang.org/docs/'],
+['Apache Spark','Hard','Explore resilient distributed datasets (RDDs), in-memory cluster computing, and DAG execution.','https://spark.apache.org/docs/latest/'],
+['SurrealDB','Hard','Investigate multi-model databases, graph relations, document storage, and realtime live queries.','https://surrealdb.com/docs'],
 ]],
 ['Failure Cases','Failure','Business history',[
 ['Google+','Medium','Investigate identity, social graphs, product integration, and failed network effects.','https://en.wikipedia.org/wiki/Google%2B'],
@@ -111,6 +141,9 @@ const groups: [string,string,string,Row[]][] = [
 ['Windows Phone','Medium','Explore developer incentives, app gaps, and mobile ecosystem feedback loops.','https://en.wikipedia.org/wiki/Windows_Phone'],
 ['Google Glass','Medium','Evaluate wearable use cases, privacy concerns, and consumer versus enterprise fit.','https://en.wikipedia.org/wiki/Google_Glass'],
 ['MoviePass','Medium','Investigate subscription pricing, adverse selection, and unsustainable unit economics.','https://en.wikipedia.org/wiki/MoviePass'],
+['Theranos','Hard','Investigate micro-blood testing claims, regulatory evasion, investor deception, and culture flaws.','https://en.wikipedia.org/wiki/Theranos'],
+['FTX','Insane','Examine custodial exchange architecture, balance-sheet fraud, liquidation engine flaws, and fallout.','https://en.wikipedia.org/wiki/Bankruptcy_of_FTX'],
+['WeWork','Hard','Investigate long-term lease liabilities versus short-term tenant revenue and venture subsidization.','https://en.wikipedia.org/wiki/WeWork'],
 ]],
 ['Engineering Systems','Engineering','Distributed systems',[
 ['Netflix architecture','Insane','Trace video delivery, service isolation, resilience testing, and failure containment.','https://netflixtechblog.com'],
@@ -126,6 +159,10 @@ const groups: [string,string,string,Row[]][] = [
 ['Google Maps','Insane','Investigate road graphs, route optimization, traffic prediction, and map updates.','https://developers.google.com/maps'],
 ['GitHub architecture','Hard','Explore Git storage, repository availability, database scaling, and monolith boundaries.','https://github.blog/engineering/'],
 ['Discord architecture','Hard','Investigate realtime fan-out, message storage, voice routing, and hot partitions.','https://discord.com/blog'],
+['YouTube video delivery','Insane','Trace video chunking, adaptive bitrate streaming (DASH/HLS), and edge CDN caching topologies.','https://research.google'],
+['WhatsApp multi-device sync','Hard','Explore end-to-end encrypted identity key synchronization, queuing, and device pairing.','https://engineering.fb.com'],
+['Uber geospatial indexing H3','Hard','Investigate hexagonal hierarchical spatial index algorithms, dispatch, and smoothing.','https://h3geo.org/docs/'],
+['Netflix Chaos Engineering','Hard','Examine automated production fault injection, Simian Army, and resilient architectural fallbacks.','https://netflixtechblog.com'],
 ]],
 ['Technology','Technology','Computer science',[
 ['WebAssembly','Hard','Investigate portable bytecode, sandboxing, and performance beyond JavaScript.','https://webassembly.org'],
@@ -134,6 +171,9 @@ const groups: [string,string,string,Row[]][] = [
 ['gRPC','Hard','Investigate protocol buffers, streaming RPC, and service interoperability.','https://grpc.io'],
 ['HTTP/3','Hard','Explore QUIC, connection migration, packet loss, and transport security.','https://www.rfc-editor.org/rfc/rfc9114'],
 ['WebGPU','Insane','Investigate browser GPU access, compute shaders, and portable parallel programming.','https://www.w3.org/TR/webgpu/'],
+['Zero-Knowledge Proofs','Insane','Investigate cryptographic zk-SNARKs, verifiable off-chain computation, and privacy protocols.','https://en.wikipedia.org/wiki/Zero-knowledge_proof'],
+['CRDTs','Hard','Explore Conflict-free Replicated Data Types, state vs operation convergence, and local-first apps.','https://crdt.tech'],
+['Vector Databases','Hard','Investigate HNSW graphs, inverted file indexing (IVF), cosine similarity, and semantic retrieval.','https://en.wikipedia.org/wiki/Vector_database'],
 ]],
 ['Business Models','Business Model','Business strategy',[
 ['Shopify','Medium','Investigate merchant subscriptions, payments revenue, and the platform partner ecosystem.','https://www.shopify.com'],
@@ -142,6 +182,9 @@ const groups: [string,string,string,Row[]][] = [
 ['Unity','Hard','Explore engine licensing, developer trust, and monetization across a game lifecycle.','https://unity.com'],
 ['Adobe Creative Cloud','Medium','Investigate the transition from perpetual licenses to creative subscriptions.','https://www.adobe.com/creativecloud.html'],
 ['ARM','Hard','Explore intellectual-property licensing, chip royalties, and ecosystem coordination.','https://www.arm.com'],
+['Product-Led Growth','Medium','Evaluate self-serve viral onboarding, usage-based triggers, and bottoms-up enterprise sales.','https://en.wikipedia.org/wiki/Product-led_growth'],
+['Two-Sided Marketplaces','Hard','Investigate solving the cold-start chicken-and-egg problem, take rates, and network effects.','https://en.wikipedia.org/wiki/Two-sided_market'],
+['Creator Economy Monetization','Medium','Explore direct subscriptions, tipping, micro-merchandise, and platform audience ownership.','https://en.wikipedia.org/wiki/Creator_economy'],
 ]],
 ['Cybersecurity','Cybersecurity','Security',[
 ['SolarWinds','Hard','Investigate a software supply-chain compromise and the limits of trusted updates.','https://www.cisa.gov'],
@@ -154,7 +197,10 @@ const groups: [string,string,string,Row[]][] = [
 ['Public-key infrastructure','Hard','Explore certificate chains, trust anchors, revocation, and key management.','https://letsencrypt.org/docs/'],
 ['XZ Utils backdoor','Insane','Investigate maintainer trust, build artifacts, and a targeted supply-chain attack.','https://www.openwall.com/lists/oss-security/2024/03/29/4'],
 ['Cloudflare outages','Hard','Explore configuration rollout, blast radius, failover, and incident transparency.','https://blog.cloudflare.com'],
+['WebAuthn Standard','Hard','Investigate browser authenticator APIs, RP ID scoping, assertion signing, and phishing defenses.','https://webauthn.guide/'],
+['OAuth 2 and OIDC','Medium','Explore authorization code flows, PKCE verification, JWT claims, and identity tokens.','https://oauth.net/2/'],
+['BGP Hijacking','Insane','Investigate border gateway protocol trust assumptions, autonomous system routing, and RPKI.','https://www.cloudflare.com/learning/security/glossary/bgp-hijacking/'],
 ]],
 ];
 export const questions = ['What problem does it solve, and for whom?','How does the product or system work?','Which technical choices matter most?','How is the system structured?','What funds it or makes it sustainable?','What alternatives compete with it?','What advantage is hard to copy?','Where does it break or fall short?','What is your own conclusion?','How would you explain it in five minutes?'];
-export const challenges:Challenge[] = groups.flatMap(([category,type,industry,rows])=>rows.map(([title,difficulty,description,url])=>({id:'',number:0,title,slug:title.toLowerCase().replace(/\+/g,'-plus').replace(/[^a-z0-9]+/g,'-').replace(/-$/,''),category,type,industry,difficulty:difficulty as Challenge['difficulty'],description,mission:description+' Build your own explanation, identify the central tradeoff, and support your verdict with sources.',researchQuestions:[description.replace(/\.$/,'')+' — what evidence can you find?',...questions],keywords:[...title.toLowerCase().split(' '),category.toLowerCase(),industry.toLowerCase(),...description.toLowerCase().replace(/[^a-z ]/g,'').split(' ').filter(w=>w.length>5)],sources:[{label:url.includes('wikipedia')?'Historical overview':url.includes('github.com')?'Source repository':url.includes('docs')?'Documentation':'Primary starting point',url}],featured:['Perplexity','Zerodha','Docker','Netflix'].includes(title),createdAt:'2026-10-01'}))).map((c,i)=>({...c,id:`topic-${i+1}`,number:i+1}));
+export const challenges:Challenge[] = groups.flatMap(([category,type,industry,rows])=>rows.map(([title,difficulty,description,url])=>({id:'',number:0,title,slug:title.toLowerCase().replace(/\+/g,'-plus').replace(/[^a-z0-9]+/g,'-').replace(/-$/,''),category,type,industry,difficulty:difficulty as Challenge['difficulty'],description,mission:description+' Build your own explanation, identify the central tradeoff, and support your verdict with sources.',researchQuestions:[description.replace(/\.$/,'')+' — what evidence can you find?',...questions],keywords:[...title.toLowerCase().split(' '),category.toLowerCase(),industry.toLowerCase(),...description.toLowerCase().replace(/[^a-z ]/g,'').split(' ').filter(w=>w.length>4)],sources:[{label:url.includes('wikipedia')?'Historical overview':url.includes('github.com')?'Source repository':url.includes('docs')?'Documentation':'Primary starting point',url}],featured:['Perplexity','Zerodha','Docker','Netflix','Rust','Cloudflare','Stripe','Cursor'].includes(title),createdAt:'2026-10-01'}))).map((c,i)=>({...c,id:`topic-${i+1}`,number:i+1}));
