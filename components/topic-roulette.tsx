@@ -16,9 +16,9 @@ interface TopicRouletteProps {
   onClose?: () => void;
 }
 
-const ITEM_HEIGHT = 96; // Height in pixels for each topic card in the reel
+const ITEM_HEIGHT = 120; // Height in pixels for each topic card in the reel (prominent & readable for reels)
 const VISIBLE_COUNT = 5; // Number of items visible in viewport
-const VIEWPORT_HEIGHT = ITEM_HEIGHT * VISIBLE_COUNT; // 480px
+const VIEWPORT_HEIGHT = ITEM_HEIGHT * VISIBLE_COUNT; // 600px
 const TOTAL_SLOTS = 52; // Number of slots in the reel before landing on target
 const SPIN_DURATION_MS = 4800; // Duration of full dramatic spin
 
@@ -296,20 +296,20 @@ export function TopicRoulette({
         <div className="roulette-eyebrow">
           <span className="live-pulse" />
           <span className="mono">
-            {isDaily ? `DAILY CHALLENGE · ${dateKey()}` : '30 MINUTE · TOPIC ROULETTE'}
+            {isDaily ? `DAILY CHALLENGE · ${dateKey()}` : '30 MINUTE · WHAT WILL YOU STUDY'}
           </span>
         </div>
         <h1 className="roulette-title">
           {revealed
-            ? 'CHALLENGE SELECTED'
+            ? 'WHAT YOU WILL STUDY'
             : isSpinning
             ? 'SELECTING TOPIC…'
             : 'WHAT WILL YOU STUDY?'}
         </h1>
         <p className="roulette-subtitle">
           {revealed
-            ? '30 minutes to understand it. 5 minutes to pitch it.'
-            : 'Unseen topics prioritized. Every spin lands on a real-world system.'}
+            ? 'Your 30-minute deep-dive study challenge. Connect the dots and form your mental model.'
+            : '30 minutes to study, understand, and break down a real-world system.'}
         </p>
       </div>
 
@@ -403,7 +403,7 @@ export function TopicRoulette({
               <div className="bracket bracket-right" />
               <div className="center-reticle" />
               <div className="center-tag mono">
-                {isSpinning ? 'SPINNING…' : justLocked ? 'LOCKED' : 'TARGET WINDOW'}
+                {isSpinning ? 'SPINNING…' : justLocked ? 'STUDY TOPIC LOCKED' : 'TOPIC TO STUDY'}
               </div>
             </div>
 
@@ -499,7 +499,7 @@ export function TopicRoulette({
           </div>
 
           <div className="reveal-topic-hero">
-            <p className="reveal-tagline mono muted">YOUR CHALLENGE TOPIC</p>
+            <p className="reveal-tagline mono orange">WHAT YOU WILL STUDY</p>
             <h2 className="reveal-topic-title">{winner.title}</h2>
             <p className="reveal-description">{winner.description}</p>
           </div>
@@ -507,21 +507,21 @@ export function TopicRoulette({
           <div className="reveal-mission-box">
             <div className="mission-label mono">
               <Sparkles size={14} className="orange" />
-              <span>THE 30-MINUTE MISSION</span>
+              <span>THE 30-MINUTE STUDY MISSION</span>
             </div>
             <p className="mission-text">{winner.mission}</p>
           </div>
 
           <div className="reveal-specs-grid">
             <div className="spec-card">
-              <span className="spec-label mono">RESEARCH CLOCK</span>
+              <span className="spec-label mono">STUDY CLOCK</span>
               <strong className="spec-val orange">30:00</strong>
-              <span className="spec-sub">Build your model</span>
+              <span className="spec-sub">Deep research & mental model</span>
             </div>
             <div className="spec-card">
-              <span className="spec-label mono">PITCH CLOCK</span>
+              <span className="spec-label mono">EXPLANATION CLOCK</span>
               <strong className="spec-val">05:00</strong>
-              <span className="spec-sub">Explain it on camera</span>
+              <span className="spec-sub">Explain what you learned</span>
             </div>
             <div className="spec-card">
               <span className="spec-label mono">COMPLEXITY</span>
@@ -549,7 +549,7 @@ export function TopicRoulette({
           ) : (
             <div className="reveal-cta-bar">
               <button className="button primary big start-30-btn" onClick={handleStartSession}>
-                <span>START 30:00</span>
+                <span>START 30:00 STUDY</span>
                 <ArrowRight size={20} />
               </button>
               {!isDaily && <button className="button quiet re-spin-btn" onClick={spinRoulette}>

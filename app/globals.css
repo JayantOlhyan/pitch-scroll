@@ -1389,7 +1389,7 @@ main {
 /* TOPIC ROULETTE / MECHANICAL WHEEL SELECTOR STYLES                         */
 /* ========================================================================= */
 .topic-roulette-container {
-  max-width: 920px;
+  max-width: 1040px;
   margin: 0 auto;
   padding: 40px 24px 70px;
   text-align: center;
@@ -1411,18 +1411,20 @@ main {
 }
 
 .roulette-title {
-  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-size: clamp(2.8rem, 6vw, 4.4rem);
   font-weight: 900;
   letter-spacing: -0.04em;
   color: #fff;
+  line-height: 1.05;
 }
 
 .roulette-subtitle {
-  font-size: 15px;
-  margin-top: 12px;
-  color: var(--muted);
-  max-width: 600px;
+  font-size: 17px;
+  margin-top: 14px;
+  color: #b5c4bc;
+  max-width: 680px;
   margin-inline: auto;
+  line-height: 1.5;
 }
 
 .roulette-controls-bar {
@@ -1480,13 +1482,13 @@ main {
 
 /* Mechanical Reel Chassis */
 .roulette-machine-box {
-  background: #0f1514;
-  border: 2px solid #283632;
-  border-radius: 10px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  background: #0d1312;
+  border: 2px solid #2d3e38;
+  border-radius: 14px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 100, 44, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   position: relative;
   overflow: hidden;
-  padding-bottom: 30px;
+  padding-bottom: 34px;
 }
 
 .roulette-reel-viewport {
@@ -1500,73 +1502,83 @@ main {
   position: absolute;
   left: 0;
   right: 0;
-  height: 140px;
+  height: 160px;
   z-index: 4;
   pointer-events: none;
 }
 
 .reel-fade.top {
   top: 0;
-  background: linear-gradient(to bottom, #0f1514 10%, rgba(15, 21, 20, 0));
+  background: linear-gradient(to bottom, #0d1312 12%, rgba(13, 19, 18, 0));
 }
 
 .reel-fade.bottom {
   bottom: 0;
-  background: linear-gradient(to top, #0f1514 10%, rgba(15, 21, 20, 0));
+  background: linear-gradient(to top, #0d1312 12%, rgba(13, 19, 18, 0));
 }
 
 /* Central Selection Window */
 .selection-window {
   position: absolute;
-  top: 192px; /* (480 - 96) / 2 */
-  left: 16px;
-  right: 16px;
-  height: 96px;
-  border-top: 2px solid var(--orange);
-  border-bottom: 2px solid var(--orange);
-  background: rgba(255, 100, 44, 0.04);
+  top: 240px; /* (600 - 120) / 2 */
+  left: 14px;
+  right: 14px;
+  height: 120px;
+  border-top: 3px solid var(--orange);
+  border-bottom: 3px solid var(--orange);
+  background: rgba(255, 100, 44, 0.08);
+  box-shadow: inset 0 0 35px rgba(255, 100, 44, 0.14), 0 0 25px rgba(255, 100, 44, 0.2);
   z-index: 5;
   pointer-events: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 18px;
+  padding: 0 20px;
+  border-radius: 8px;
   transition: all 0.2s ease;
 }
 
 .selection-window.spinning {
-  background: rgba(255, 100, 44, 0.08);
-  box-shadow: inset 0 0 25px rgba(255, 100, 44, 0.15);
+  background: rgba(255, 100, 44, 0.12);
+  box-shadow: inset 0 0 45px rgba(255, 100, 44, 0.25), 0 0 35px rgba(255, 100, 44, 0.3);
 }
 
 .selection-window.locked {
-  background: rgba(255, 100, 44, 0.18);
-  box-shadow: 0 0 35px var(--orange-glow), inset 0 0 30px rgba(255, 100, 44, 0.3);
-  border-color: #ff8b5f;
+  background: rgba(255, 100, 44, 0.22);
+  box-shadow: 0 0 50px var(--orange-glow), inset 0 0 45px rgba(255, 100, 44, 0.4);
+  border-color: #ff9166;
 }
 
 .bracket {
-  width: 12px;
-  height: 48px;
-  border: 2px solid var(--orange);
+  width: 18px;
+  height: 68px;
+  border: 3px solid var(--orange);
+  box-shadow: 0 0 15px rgba(255, 100, 44, 0.5);
 }
 
 .bracket-left {
   border-right: 0;
+  border-radius: 4px 0 0 4px;
 }
 
 .bracket-right {
   border-left: 0;
+  border-radius: 0 4px 4px 0;
 }
 
 .center-tag {
   position: absolute;
-  right: 32px;
-  top: 8px;
-  font-size: 9px;
+  right: 28px;
+  top: 10px;
+  font-size: 11px;
+  font-weight: 800;
   color: var(--orange);
-  letter-spacing: 0.1em;
-  opacity: 0.8;
+  letter-spacing: 0.12em;
+  background: rgba(13, 19, 18, 0.92);
+  padding: 3px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 100, 44, 0.45);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
 /* The actual scrolling reel */
@@ -1581,75 +1593,110 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 36px;
+  padding: 0 24px;
   user-select: none;
   transition: opacity 0.15s, transform 0.15s;
 }
 
 .reel-card-inner {
   width: 100%;
-  max-width: 680px;
+  max-width: 860px;
   background: #141c19;
   border: 1px solid #283832;
-  border-radius: 6px;
-  padding: 14px 24px;
+  border-radius: 10px;
+  padding: 16px 28px;
   display: grid;
-  grid-template-columns: 140px 1fr 100px;
+  grid-template-columns: 160px 1fr 110px;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
   text-align: left;
+  transition: all 0.15s ease;
 }
 
 .reel-card.active .reel-card-inner {
-  background: #1a2521;
-  border-color: #4a6358;
+  background: #192520;
+  border: 2px solid #527466;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 100, 44, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .reel-meta {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .reel-num {
-  font-size: 11px;
-  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  color: #798d82;
+}
+
+.reel-card.active .reel-num {
+  color: var(--orange);
+  font-weight: 800;
 }
 
 .reel-cat-badge {
   font-family: var(--mono);
-  font-size: 9px;
-  padding: 3px 6px;
-  border-radius: 3px;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 4px;
   border: 1px solid transparent;
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.reel-diff {
+  font-size: 12px;
+  color: #9eb0a6;
+  font-weight: 600;
 }
 
 .reel-title {
-  font-size: 22px;
+  font-size: clamp(22px, 3vw, 32px);
   font-weight: 800;
   letter-spacing: -0.03em;
-  color: #fff;
+  color: #d1dbd6;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.15;
+}
+
+.reel-card.active .reel-title {
+  color: #ffffff;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  text-shadow: 0 3px 18px rgba(0, 0, 0, 0.95);
 }
 
 .reel-type {
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 600;
   text-align: right;
+  color: #8b9d93;
 }
 
 /* Spin Button */
 .roulette-actions {
-  margin-top: 28px;
+  margin-top: 32px;
 }
 
 .spin-btn {
-  font-size: 16px;
-  padding: 18px 40px;
-  box-shadow: 0 4px 25px rgba(255, 100, 44, 0.4);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  padding: 20px 48px;
+  border-radius: 8px;
+  box-shadow: 0 6px 35px rgba(255, 100, 44, 0.45);
+  transition: all 0.2s ease;
+}
+
+.spin-btn:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 45px rgba(255, 100, 44, 0.65);
 }
 
 .spin-icon {
