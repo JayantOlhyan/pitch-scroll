@@ -75,6 +75,28 @@ export function TopicRoulette({
   const [justLocked, setJustLocked] = useState(false);
 
   const animRef = useRef<number | null>(null);
+  const revealTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const spinningRef = useRef(false);
+  const reducedMotionRef = useRef(false);
+  const finishSpinRef = useRef<((immediate: boolean) => void) | null>(null);
+
+  const cancelPending = useCallback(() => {
+    if (animRef.current !== null) cancelAnimationFrame(animRef.current);
+    if (revealTimerRef.current !== null) clearTimeout(revealTimerRef.current);
+    animRef.current = null;
+    revealTimerRef.current = null;
+  }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const changed = () => {
+      reducedMotionRef.current = media.matches;
+      if (media.matches && spinningRef.current) finishSpinRef.current?.(true);
+    };
+    changed();
+    media.addEventListener('change', changed);
+    return () => media.removeEventListener('change', changed);
+  }, []);
   const lastIndexRef = useRef<number>(-1);
   const startTimeRef = useRef<number>(0);
   const targetScrollRef = useRef<number>(0);
@@ -95,7 +117,7 @@ export function TopicRoulette({
   const buildReel = useCallback(
     (targetChallenge: Challenge, pool: Challenge[]) => {
       const items: Challenge[] = [];
-      const safePool = pool.length > 0 ? pool : state.challenges;
+      const safePool = pool;
 
       for (let i = 0; i < TOTAL_SLOTS; i++) {
         if (i === TOTAL_SLOTS - 3) {
@@ -149,15 +171,17 @@ export function TopicRoulette({
    * Triggers the topic roulette spin
    */
   const spinRoulette = useCallback(() => {
-    if (isSpinning) return;
-    const pool = candidatePool.length > 0 ? candidatePool : state.challenges;
+    if (isDaily || spinningRef.current) return;
+    const pool = candidatePool;
     if (pool.length === 0) return;
 
     // Pick target topic deterministically before the animation
     const selected = choose(pool, state.seen, state.sessions);
     if (!selected) return;
 
-    const reel = buildReel(selected, pool);
+    cancelPending();
+    spinningRef.current = true;
+    const reel = reducedMotionRef.current ? [] : buildReel(selected, pool);
     setReelItems(reel);
     setWinner(selected);
     setRevealed(false);
@@ -173,7 +197,32 @@ export function TopicRoulette({
     startTimeRef.current = performance.now();
     lastIndexRef.current = -1;
 
-    if (animRef.current) cancelAnimationFrame(animRef.current);
+    let recorded = false;
+    const reveal = () => {
+      revealTimerRef.current = null;
+      spinningRef.current = false;
+      finishSpinRef.current = null;
+      setIsSpinning(false);
+      setRevealed(true);
+    };
+    const finish = (immediate: boolean) => {
+      cancelPending();
+      setScrollY(targetY);
+      setJustLocked(true);
+      if (!recorded) {
+        recorded = true;
+        if (!immediate) rouletteHit();
+        play('reveal');
+        update(s => ({...s, seen: [...s.seen.filter(id => id !== selected.id), selected.id]}));
+      }
+      if (immediate) reveal();
+      else revealTimerRef.current = setTimeout(reveal, 650);
+    };
+    finishSpinRef.current = finish;
+    if (reducedMotionRef.current) {
+      finish(true);
+      return;
+    }
 
     const step = (now: number) => {
       const elapsed = now - startTimeRef.current;
@@ -199,50 +248,34 @@ export function TopicRoulette({
       if (t < 1) {
         animRef.current = requestAnimationFrame(step);
       } else {
-        // Animation finished! Snap to exact target
-        setScrollY(targetY);
-        setIsSpinning(false);
-        setJustLocked(true);
-
-        // Sound: Final impact hit
-        rouletteHit();
-        play('reveal');
-
-        // Record topic as seen
-        update((s) => ({
-          ...s,
-          seen: [...s.seen.filter((id) => id !== selected.id), selected.id],
-        }));
-
-        // Reveal the challenge after a short cinematic pause
-        setTimeout(() => {
-          setRevealed(true);
-        }, 650);
+        finish(false);
       }
     };
 
     animRef.current = requestAnimationFrame(step);
-  }, [isSpinning, candidatePool, state.challenges, state.seen, state.sessions, buildReel, rouletteTick, rouletteHit, play, update]);
+  }, [isDaily, cancelPending, candidatePool, state.challenges, state.seen, state.sessions, buildReel, rouletteTick, rouletteHit, play, update]);
 
   // Clean up animation on unmount
   useEffect(() => {
     return () => {
-      if (animRef.current) cancelAnimationFrame(animRef.current);
+      cancelPending();
+      spinningRef.current = false;
+      finishSpinRef.current = null;
     };
-  }, []);
+  }, [cancelPending]);
 
   // Keyboard shortcut: Space or Enter to spin if not spinning
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if ((e.target as HTMLElement)?.closest('input,textarea,select,[contenteditable]')) return;
-      if (!isSpinning && !revealed && (e.code === 'Space' || e.code === 'Enter')) {
+      if ((e.target as HTMLElement)?.closest('input,textarea,select,[contenteditable],button,a,[role=button]')) return;
+      if (!isDaily && !e.metaKey && !e.ctrlKey && !e.altKey && !e.shiftKey && !e.repeat && !spinningRef.current && !revealed && candidatePool.length > 0 && (e.code === 'Space' || e.code === 'Enter')) {
         e.preventDefault();
         spinRoulette();
       }
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [isSpinning, revealed, spinRoulette]);
+  }, [isDaily, candidatePool.length, revealed, spinRoulette]);
 
   // Active session check
   const activeSession = state.sessions.find((s) => s.id === state.activeId && s.phase !== 'complete');
@@ -349,6 +382,10 @@ export function TopicRoulette({
             {candidatePool.length} {candidatePool.length === 1 ? 'topic' : 'topics'} in pool
           </div>
         </div>
+      )}
+
+      {!isDaily && !revealed && candidatePool.length === 0 && (
+        <p role="status" className="notice">No topics match these filters. Change or clear your filters to spin.</p>
       )}
 
       {/* Main Roulette Mechanism / Viewport */}
@@ -515,10 +552,10 @@ export function TopicRoulette({
                 <span>START 30:00</span>
                 <ArrowRight size={20} />
               </button>
-              <button className="button quiet re-spin-btn" onClick={spinRoulette}>
+              {!isDaily && <button className="button quiet re-spin-btn" onClick={spinRoulette}>
                 <RotateCcw size={16} />
                 <span>Spin Again</span>
-              </button>
+              </button>}
             </div>
           )}
 
