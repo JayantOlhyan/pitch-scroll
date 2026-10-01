@@ -6,8 +6,8 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
     "start": "next start",
     "dev:vinext": "node scripts/run-framework.mjs dev",
     "build:vinext": "node scripts/run-framework.mjs build",
