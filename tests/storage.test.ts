@@ -86,3 +86,15 @@ test('edited slugs do not change an established built-in identity',()=>{
  const state=normalizeState(legacy(list));
  assert.equal(state.challenges.find(c=>c.slug==='openai')?.id,'builtin:github');
 });
+
+
+test('imported ID reuse cannot assign old history to a different custom topic',()=>{
+ const old={...challenges[0],id:'custom-id',slug:'custom-old'};
+ const replacement={...challenges[1],id:'custom-id',slug:'custom-new'};
+ const session=createSession(old,1,1000);
+ const state={...initialState(),challenges:[old],sessions:[session],seen:[old.id]};
+ const next=replaceLibrary(state,[replacement]);
+ assert.equal(statusFor(replacement,next),'Untouched');
+ assert.equal(next.sessions[0].challenge.id,'history:custom-id:custom-old');
+ assert.deepEqual(next.seen,['history:custom-id:custom-old']);
+});

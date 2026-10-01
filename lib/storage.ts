@@ -73,7 +73,16 @@ export function replaceLibrary(state:AppState,raw:unknown):AppState {
  parseChallenges(list);
  const previous = new Map(state.challenges.map(c=>[c.id,c.slug]));
  const bySlug = new Map(list.map(c=>[c.slug,c.id]));
- const remap = (id:string,slug?:string)=>bySlug.get(slug ?? previous.get(id) ?? '') ?? id;
+ const byId = new Map(list.map(c=>[c.id,c.slug]));
+ for (const session of state.sessions) {
+  if (!previous.has(session.challenge.id)) previous.set(session.challenge.id,session.challenge.slug);
+ }
+ const remap = (id:string,slug=previous.get(id))=>{
+  const matching = slug ? bySlug.get(slug) : undefined;
+  if (matching) return matching;
+  if (byId.has(id) && byId.get(id)!==slug) return `history:${id}:${slug ?? 'unknown'}`;
+  return id;
+ };
  return {...state,catalogRevision:CATALOG_REVISION,challenges:list,
   sessions:state.sessions.map(s=>({...s,challenge:{...s.challenge,id:remap(s.challenge.id,s.challenge.slug)}})),
   seen:[...new Set(state.seen.map(id=>remap(id)))]};
