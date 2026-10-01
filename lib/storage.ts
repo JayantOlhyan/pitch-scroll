@@ -20,19 +20,28 @@ const builtinBySlug = new Map(challenges.map(c => [c.slug, c]));
 const legacyId = /^topic-\d+$/;
 
 // Slugs in stored snapshots disambiguate IDs whose array positions changed.
-function stableChallenge(c:Challenge):Challenge {
+function legacyAliases(list:Challenge[]):Map<string,string> {
+ const orders = [legacyCatalogSlugs as readonly string[],challenges.map(c=>c.slug)];
+ const matches = (order:readonly string[])=>list.filter(c=>legacyId.test(c.id) && order[Number(c.id.slice(6))-1]===c.slug).length;
+ const order = matches(orders[1]) > matches(orders[0]) ? orders[1] : orders[0];
+ return new Map(order.map((slug,i)=>[`topic-${i+1}`,`builtin:${slug}`]));
+}
+
+function stableChallenge(c:Challenge,aliases=new Map<string,string>()):Challenge {
  if (!legacyId.test(c.id)) return c;
  const canonical = builtinBySlug.get(c.slug);
- return {...c,id:canonical?.id ?? `legacy:${c.id}`};
+ return {...c,id:canonical?.id ?? aliases.get(c.id) ?? `legacy:${c.id}`};
 }
 
 export function normalizeState(raw:unknown):AppState {
  const state = stateSchema.parse(raw);
- const idMap = new Map(state.challenges.map(c => [c.id,stableChallenge(c).id]));
+ const aliases = legacyAliases(state.challenges);
+ const stable = (c:Challenge)=>stableChallenge(c,aliases);
+ const idMap = new Map(state.challenges.map(c => [c.id,stable(c).id]));
  for (const session of state.sessions) {
-  if (!idMap.has(session.challenge.id)) idMap.set(session.challenge.id,stableChallenge(session.challenge).id);
+  if (!idMap.has(session.challenge.id)) idMap.set(session.challenge.id,stable(session.challenge).id);
  }
- const list = state.challenges.map(stableChallenge);
+ const list = state.challenges.map(stable);
  if ((state.catalogRevision ?? 0) < CATALOG_REVISION) {
   const ids = new Set(list.map(c=>c.id));
   const slugs = new Set(list.map(c=>c.slug));
@@ -42,12 +51,14 @@ export function normalizeState(raw:unknown):AppState {
   }
  }
  return {...state,catalogRevision:Math.max(state.catalogRevision ?? 0,CATALOG_REVISION),challenges:list,
-  sessions:state.sessions.map(s=>({...s,challenge:stableChallenge(s.challenge)})),
+  sessions:state.sessions.map(s=>({...s,challenge:stable(s.challenge)})),
   seen:[...new Set(state.seen.map(id=>idMap.get(id) ?? (legacyId.test(id)?`legacy:${id}`:id)))]};
 }
 
 export function replaceLibrary(state:AppState,raw:unknown):AppState {
- const list = parseChallenges(raw).map(stableChallenge);
+ const parsed = parseChallenges(raw);
+ const aliases = legacyAliases(parsed);
+ const list = parsed.map(c=>stableChallenge(c,aliases));
  // Validate again: canonicalizing legacy IDs must not introduce collisions.
  parseChallenges(list);
  const previous = new Map(state.challenges.map(c=>[c.id,c.slug]));

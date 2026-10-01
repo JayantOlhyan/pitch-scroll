@@ -131,7 +131,7 @@ export function TopicRoulette({
       }
       return items;
     },
-    [state.challenges]
+    []
   );
 
   /**
@@ -253,7 +253,7 @@ export function TopicRoulette({
     };
 
     animRef.current = requestAnimationFrame(step);
-  }, [isDaily, cancelPending, candidatePool, state.challenges, state.seen, state.sessions, buildReel, rouletteTick, rouletteHit, play, update]);
+  }, [isDaily, cancelPending, candidatePool, state.seen, state.sessions, buildReel, rouletteTick, rouletteHit, play, update]);
 
   // Clean up animation on unmount
   useEffect(() => {
