@@ -7,4 +7,4 @@ export const reflectionLabels = ["What did you understand that you didn’t know
 export type Phase = 'research'|'pitch'|'assessment'|'complete';
 export type Session = {id:string; number:number; challenge:Challenge; phase:Phase; startedAt:number; endTime:number; phaseStartedAt:number; pausedAt:number|null; pausedTotal:number; practice:boolean; notes:Record<string,string>; checklist:boolean[]; scores:number[]; reflections:string[]; researchSeconds:number; pitchSeconds:number; completedAt?:number};
 export type Preferences = {sound:boolean;volume:number;cinematic:boolean;recording:'off'|'wide'|'vertical'};
-export type AppState = {version:1; challenges:Challenge[]; sessions:Session[]; seen:string[]; activeId:string|null; preferences:Preferences};
+export type AppState = {version:1; catalogRevision?:number; challenges:Challenge[]; sessions:Session[]; seen:string[]; activeId:string|null; preferences:Preferences};

@@ -1,7 +1,7 @@
 'use client';
 import {createContext,useCallback,useContext,useEffect,useRef,useState,ReactNode} from 'react';
 import {AppState,Challenge,Session} from '@/types';
-import {initialState,loadState,saveState,STORAGE_KEY,stateSchema} from '@/lib/storage';
+import {initialState,loadState,saveState,STORAGE_KEY,normalizeState} from '@/lib/storage';
 import {advance,createSession,remaining} from '@/lib/engine';
 import {sound,SoundEvent} from '@/lib/sound';
 type Context={state:AppState;ready:boolean;error:string;update:(fn:(s:AppState)=>AppState)=>void;editSession:(id:string,fn:(s:Session)=>Session)=>void;start:(c:Challenge)=>string;play:(e:SoundEvent,opts?:{speedRatio?:number;isNearStop?:boolean})=>void;rouletteTick:(speedRatio?:number,isNearStop?:boolean)=>void;rouletteHit:()=>void;now:number;clearError:()=>void};
@@ -11,7 +11,7 @@ export function AppProvider({children}:{children:ReactNode}){
  const latest=useRef(state);const writable=useRef(true);
  const update=useCallback((fn:(s:AppState)=>AppState)=>{const next=fn(latest.current);latest.current=next;setState(next);if(writable.current)try{saveState(next);}catch{setError('Your browser could not save this change. Export a backup from Data management before closing this tab.');}},[]);
  useEffect(()=>{try{const s=loadState();latest.current=s;setState(s);}catch{writable.current=false;setError('Saved data could not be read. Your existing data has been preserved. Export the stored data in Data management before replacing it.');}setReady(true);
- const onStorage=(e:StorageEvent)=>{if(e.key===STORAGE_KEY&&e.newValue)try{const s=stateSchema.parse(JSON.parse(e.newValue));latest.current=s;setState(s);}catch{}};window.addEventListener('storage',onStorage);return()=>window.removeEventListener('storage',onStorage);},[]);
+ const onStorage=(e:StorageEvent)=>{if(e.key===STORAGE_KEY&&e.newValue)try{const s=normalizeState(JSON.parse(e.newValue));latest.current=s;setState(s);}catch{}};window.addEventListener('storage',onStorage);return()=>window.removeEventListener('storage',onStorage);},[]);
  const play=useCallback((event:SoundEvent,opts?:{speedRatio?:number;isNearStop?:boolean})=>{const p=latest.current.preferences;sound(event,p.sound,p.volume,opts);},[]);
  const rouletteTick=useCallback((speedRatio=0.5,isNearStop=false)=>{const p=latest.current.preferences;sound('roulette-tick',p.sound,p.volume,{speedRatio,isNearStop});},[]);
  const rouletteHit=useCallback(()=>{const p=latest.current.preferences;sound('roulette-hit',p.sound,p.volume);},[]);
