@@ -5,7 +5,7 @@ import {challenges} from '../data/challenges';
 import {parseChallenges,initialState,stateSchema,sessionSchema} from '../lib/storage';
 import {decodeShare,shareToken,contentAssets} from '../lib/sharing';
 const start=1000000;const make=()=>createSession(challenges[0],1,start);
-test('dataset has 131 unique structured challenges with source URLs',()=>{const data=parseChallenges(challenges);assert.equal(data.length,131);assert.equal(new Set(data.map(c=>c.slug)).size,131);assert.ok(data.every(c=>c.sources.length&&c.researchQuestions.length>=10));});
+test('dataset has 177 unique structured challenges with source URLs',()=>{const data=parseChallenges(challenges);assert.equal(data.length,177);assert.equal(new Set(data.map(c=>c.slug)).size,177);assert.ok(data.every(c=>c.sources.length&&c.researchQuestions.length>=10));});
 test('research begins at exactly 30:00 and survives serialization',()=>{const s=make();assert.equal(remaining(s,start),1800);const restored=sessionSchema.parse(JSON.parse(JSON.stringify(s)));assert.equal(remaining(restored,start+62500),1738);});
 test('research expiration starts pitch at the research deadline',()=>{const s=advance(make(),start+1800000);assert.equal(s.phase,'pitch');assert.equal(remaining(s,start+1800000),300);assert.equal(s.researchSeconds,1800);});
 test('inactive tab accounts for pitch time already elapsed',()=>{const s=advance(make(),start+1900000);assert.equal(s.phase,'pitch');assert.equal(remaining(s,start+1900000),200);});
