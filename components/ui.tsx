@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import {ArrowUpRight,AudioLines,Clock3,Command,Volume2,VolumeX,X} from 'lucide-react';
+import {ArrowUpRight,Clock3,Command,Volume2,VolumeX,X} from 'lucide-react';
 import {useApp} from '@/hooks/use-app';
 import {Challenge,Session} from '@/types';
 import {formatTime,remaining,statusFor} from '@/lib/engine';

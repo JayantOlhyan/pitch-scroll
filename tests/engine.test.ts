@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {advance,createSession,remaining,pause,choose,dailyChallenge,statistics,dateKey,score} from '../lib/engine';
+import {advance,createSession,remaining,pause,choose,dailyChallenge,statistics,score} from '../lib/engine';
 import {challenges} from '../data/challenges';
 import {parseChallenges,initialState,stateSchema,sessionSchema} from '../lib/storage';
 import {decodeShare,shareToken,contentAssets} from '../lib/sharing';

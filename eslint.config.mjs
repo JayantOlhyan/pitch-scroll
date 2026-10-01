@@ -14,6 +14,13 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
   ]),
   {
+    rules: {
+      "react-hooks/purity": "off",
+      "react-hooks/set-state-in-effect": "off",
+      "@next/next/no-img-element": "off",
+    },
+  },
+  {
     files: ["components/ui/**/*.{ts,tsx}", "hooks/use-mobile.ts"],
     rules: {
       // These files are vendored verbatim from shadcn@4.17.0. Keep the

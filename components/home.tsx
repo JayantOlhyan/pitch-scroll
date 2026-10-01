@@ -1,8 +1,8 @@
 'use client';
 import Link from 'next/link';
-import {ArrowUpRight,Clock3,Focus,Mic2,Shuffle,Radio} from 'lucide-react';
+import {ArrowUpRight,Focus,Shuffle,Radio} from 'lucide-react';
 import {useApp} from '@/hooks/use-app';
-import {statistics,formatTime} from '@/lib/engine';
+import {statistics} from '@/lib/engine';
 import {ChallengeCard,SectionTitle,number} from './ui';
 export function Home(){const {state}=useApp();const stats=statistics(state.sessions);const featured=state.challenges.filter(c=>c.featured).slice(0,4);return <>
 <section className="hero"><div className="hero-copy"><p className="eyebrow"><span className="orange-square"/> A tech learning & content series</p><h1><span className="orange">30 MINUTES</span><br/>TO UNDERSTAND IT.<br/><span className="outline-text">5 MINUTES</span><br/>TO PITCH IT.</h1><p className="hero-description">One unfamiliar subject. A running clock.<br/>Research under pressure. Then explain what you learned before the time runs out.</p><div className="actions"><Link href="/challenge" className="button primary"><Shuffle size={17}/> Start challenge</Link><Link href="/challenges" className="button">Browse case studies</Link></div><div className="hero-footnote"><span>No preparation.</span><span>No generated answers.</span><span>Real learning.</span></div></div>

@@ -1,7 +1,7 @@
 'use client';
 import {useEffect,useState} from 'react';
 import {useAppRouter} from '@/hooks/use-location';
-import {BookOpen,CheckCheck,FileText,Maximize2,Mic2,Pause,Play,Video,Minimize2} from 'lucide-react';
+import {BookOpen,CheckCheck,FileText,Maximize2,Pause,Play,Video,Minimize2} from 'lucide-react';
 import {useApp} from '@/hooks/use-app';
 import {Session,sections} from '@/types';
 import {advance,pause,remaining} from '@/lib/engine';

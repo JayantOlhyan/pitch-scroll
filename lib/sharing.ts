@@ -1,5 +1,4 @@
 import { Session } from '@/types';
-import { downloadBlob } from './storage';
 import { formatTime,score } from './engine';
 export function shareToken(s:Session){const data={...s,notes:{},reflections:['','','',s.reflections[3]]};return btoa(String.fromCharCode(...new TextEncoder().encode(JSON.stringify(data))));}
 export function decodeShare(token:string){if(token.length>50000)throw new Error('Share link is too large');return JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(token),c=>c.charCodeAt(0))));}
