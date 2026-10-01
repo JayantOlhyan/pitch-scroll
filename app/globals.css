@@ -2330,25 +2330,27 @@ kbd {
   display: block;
   text-align: center;
   max-width: 850px;
+  width: 100%;
   margin: auto;
-  padding: 30px;
+  padding: 14px 24px;
 }
 
-.recording-essentials h2 {
-  font-size: 38px;
-  color: #fff;
-  margin: 12px 0;
+.record-notes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 11px;
 }
 
 .record-notes {
   white-space: pre-wrap;
-  margin-top: 24px;
   color: #e5ede7;
-  font-size: 20px;
-  line-height: 1.7;
+  font-size: 17px;
+  line-height: 1.6;
   background: #111716;
   border: 1px solid var(--line);
-  padding: 24px;
+  padding: 18px 22px;
   border-radius: 8px;
   text-align: left;
 }
@@ -2368,66 +2370,155 @@ kbd {
 }
 
 .recording.wide .workspace-heading {
-  padding: 30px 40px 10px;
+  padding: 24px 40px 8px;
 }
 
 .recording.wide .timer {
-  font-size: clamp(5.5rem, 11vw, 9.5rem);
+  font-size: clamp(5rem, 10vw, 8.5rem);
 }
 
 .recording.wide .record-notes {
-  max-height: 220px;
-  overflow: hidden;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.recording.wide .workspace-bottom {
+  padding: 12px 30px;
+  border-top: 1px solid #1a2520;
+  margin-top: auto;
 }
 
 /* 9:16 Instagram Reels & Shorts Vertical Mode */
 .recording.vertical {
   width: 100%;
-  max-width: 480px;
-  min-height: 854px;
+  max-width: 440px;
+  height: 782px;
   aspect-ratio: 9 / 16;
   margin: 15px auto;
   border: 2px solid #283731;
-  border-radius: 12px;
+  border-radius: 16px;
   background: #090c0c;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 20px 16px;
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9);
+  padding: 14px 16px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.95);
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
 }
 
 .recording.vertical .workspace-toolbar {
-  padding: 10px 6px;
+  padding: 4px 0 8px;
+  border-bottom: 1px solid #1a2520;
+}
+
+.recording.vertical .toolbar-left {
+  display: none;
+}
+
+.recording.vertical .toolbar-right {
+  width: 100%;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.recording.vertical .toolbar-btn {
+  font-size: 11px;
+  padding: 5px 8px;
+}
+
+.recording.vertical .recording-toggle-group .toggle-item {
+  padding: 4px 7px;
+  font-size: 11px;
 }
 
 .recording.vertical .workspace-heading {
-  padding: 20px 10px 10px;
-  gap: 18px;
+  padding: 8px 4px 4px;
+  gap: 8px;
+}
+
+.recording.vertical .workspace-heading .eyebrow {
+  font-size: 9px;
+  margin-bottom: 4px;
 }
 
 .recording.vertical .workspace-heading h1 {
-  font-size: 30px;
+  font-size: 24px;
+  line-height: 1.15;
+  margin-bottom: 4px;
+}
+
+.recording.vertical .workspace-heading .meta-row {
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.recording.vertical .timer-block {
+  padding: 0;
 }
 
 .recording.vertical .timer {
-  font-size: clamp(4.8rem, 21vw, 7.5rem);
+  font-size: clamp(3.6rem, 14vw, 5rem);
   line-height: 1;
 }
 
-.recording.vertical .recording-essentials {
-  padding: 16px 8px;
+.recording.vertical .timer-caption {
+  font-size: 8px;
+  margin-top: 4px;
 }
 
-.recording.vertical .recording-essentials h2 {
-  font-size: 26px;
+.recording.vertical .notice {
+  padding: 6px 10px;
+  font-size: 10px;
+  margin: 4px 0;
+  line-height: 1.35;
+  border-radius: 6px;
+}
+
+.recording.vertical .recording-essentials {
+  padding: 2px 0;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.recording.vertical .record-notes-header {
+  font-size: 9px;
+  margin-bottom: 4px;
+  padding: 0 2px;
 }
 
 .recording.vertical .record-notes {
-  font-size: 16px;
-  padding: 16px;
-  max-height: 250px;
-  overflow: hidden;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 10px 12px;
+  margin-top: 0;
+  max-height: 140px;
+  flex: 1;
+  overflow-y: auto;
+  border-radius: 8px;
+  background: #101614;
+  border: 1px solid #1f2b26;
+}
+
+.recording.vertical .workspace-bottom {
+  padding: 8px 4px 2px;
+  border-top: 1px solid #1a2520;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  text-align: center;
+  font-size: 9px;
+  margin-top: auto;
+  width: 100%;
+}
+
+.recording.vertical .workspace-bottom .shortcuts-help {
+  font-size: 8px;
+  opacity: 0.8;
 }
 
 /* ========================================================================= */

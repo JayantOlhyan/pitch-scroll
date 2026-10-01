@@ -228,20 +228,19 @@ export function Workspace({ session: s }: { session: Session }) {
 
       {/* Recording Mode Broadcast Card (Visible when recording mode is active) */}
       <div className="recording-essentials">
-        <div className="row between recording-meta">
-          <span className="mono orange">30 MINUTE TEST #{number(s.number)}</span>
-          <span className="badge category-badge" style={{ color: catStyle.text, borderColor: catStyle.border }}>
-            {s.challenge.category}
+        <div className="row between record-notes-header">
+          <span className="mono orange">
+            {pitch ? '05:00 PITCH TALKING POINTS' : 'LIVE MENTAL MODEL & NOTES'}
+          </span>
+          <span className="mono muted">
+            {pitch ? '01 Problem · 02 Solution · 03 Tech · 04 Business · 05 Verdict' : tab}
           </span>
         </div>
-        <h2>{s.challenge.title}</h2>
-        <p className="rec-sub mono muted">
-          {pitch
-            ? '01 Problem · 02 Solution · 03 Tech · 04 Business · 05 Verdict'
-            : s.challenge.description}
-        </p>
         <div className="record-notes">
-          {s.notes['Pitch Notes'] || s.notes['Problem'] || 'Formulate your mental model and talking points…'}
+          {s.notes[pitch ? 'Pitch Notes' : tab] ||
+            s.notes['Pitch Notes'] ||
+            s.notes['Problem'] ||
+            'Formulate your mental model and talking points…'}
         </div>
       </div>
 
