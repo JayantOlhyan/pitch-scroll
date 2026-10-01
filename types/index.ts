@@ -1,0 +1,10 @@
+export const difficulties = ['Easy', 'Medium', 'Hard', 'Insane'] as const;
+export const challengeTypes = ['Company','Startup','Product','Technology','AI','Open Source','Engineering','Business Model','Failure','Cybersecurity','Infrastructure'] as const;
+export type Challenge = { id:string; number:number; title:string; slug:string; type:string; category:string; industry:string; difficulty:typeof difficulties[number]; description:string; mission:string; researchQuestions:string[]; keywords:string[]; sources:{label:string;url:string}[]; featured:boolean; createdAt:string };
+export const sections = ['Problem','Product','Technology','Architecture','Business Model','Competition','Moat','Weaknesses','Key Insights','Pitch Notes'] as const;
+export const scoreLabels = ['Problem Understanding','Product Understanding','Technical Understanding','Business Understanding','Competition Understanding','Clarity','Pitch Delivery','Original Insight'] as const;
+export const reflectionLabels = ["What did you understand that you didn’t know 30 minutes ago?",'What did you get wrong?','What would you research next?','What is the single most important insight?'];
+export type Phase = 'research'|'pitch'|'assessment'|'complete';
+export type Session = {id:string; number:number; challenge:Challenge; phase:Phase; startedAt:number; endTime:number; phaseStartedAt:number; pausedAt:number|null; pausedTotal:number; practice:boolean; notes:Record<string,string>; checklist:boolean[]; scores:number[]; reflections:string[]; researchSeconds:number; pitchSeconds:number; completedAt?:number};
+export type Preferences = {sound:boolean;volume:number;cinematic:boolean;recording:'off'|'wide'|'vertical'};
+export type AppState = {version:1; challenges:Challenge[]; sessions:Session[]; seen:string[]; activeId:string|null; preferences:Preferences};
