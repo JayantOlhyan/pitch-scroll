@@ -61,7 +61,12 @@ test('reduced motion reveals immediately without scheduling reel animation',asyn
  await filters(page);
  await page.evaluate(()=>{
   const original=window.requestAnimationFrame;
-  window.requestAnimationFrame=(callback)=>{throw new Error('Unexpected reel animation: '+String(callback));};
+  const instrumentation=window as unknown as {spinFrames:number};
+  instrumentation.spinFrames=0;
+  window.requestAnimationFrame=(callback)=>{
+   if(callback.name==='step') instrumentation.spinFrames++;
+   return original.call(window,callback);
+  };
   (window as unknown as {restoreAnimation:()=>void}).restoreAnimation=()=>{window.requestAnimationFrame=original;};
  });
  const errors:string[]=[];
@@ -70,6 +75,7 @@ test('reduced motion reveals immediately without scheduling reel animation',asyn
  await expect(page.locator('.reveal-topic-title')).toBeVisible({timeout:1000});
  expect(await seen(page)).toHaveLength(1);
  expect(errors).toEqual([]);
+ expect(await page.evaluate(()=>(window as unknown as {spinFrames:number}).spinFrames)).toBe(0);
  await page.evaluate(()=>(window as unknown as {restoreAnimation:()=>void}).restoreAnimation());
 });
 
@@ -102,4 +108,48 @@ test('legacy browser storage upgrades and stays migrated after reload',async({pa
  await page.reload();
  await expect(page.getByRole('heading',{name:'WHAT WILL YOU STUDY?'})).toBeVisible();
  expect(await seen(page)).toEqual(['builtin:openai']);
+});
+
+test('spin stays locked throughout the delayed reveal',async({page})=>{
+ await page.goto('/challenge');
+ await expect(page.getByRole('heading',{name:'WHAT WILL YOU STUDY?'})).toBeVisible();
+ await page.clock.install();
+ await page.getByRole('button',{name:/SPIN TOPIC ROULETTE/}).click();
+ await page.clock.runFor(4850);
+ expect(await seen(page)).toHaveLength(1);
+ await expect(page.locator('.cinematic-reveal-panel')).toHaveCount(0);
+ await expect(page.getByRole('button',{name:/SPIN TOPIC ROULETTE/})).toHaveCount(0);
+ await page.keyboard.press('Space');
+ await page.clock.runFor(700);
+ await expect(page.locator('.reveal-topic-title')).toBeVisible();
+ expect(await seen(page)).toHaveLength(1);
+});
+
+test('leaving during a spin cancels callbacks and preserves unseen topics',async({page})=>{
+ await page.goto('/challenge');
+ await expect(page.getByRole('heading',{name:'WHAT WILL YOU STUDY?'})).toBeVisible();
+ await page.clock.install();
+ await page.getByRole('button',{name:/SPIN TOPIC ROULETTE/}).click();
+ await page.getByRole('link',{name:'About',exact:true}).click();
+ await page.clock.runFor(6000);
+ expect(await seen(page)).toEqual([]);
+ await page.getByRole('link',{name:/Start challenge/}).click();
+ await expect(page.getByRole('heading',{name:'WHAT WILL YOU STUDY?'})).toBeVisible();
+});
+
+test('backup restoration and cross-tab updates normalize legacy identifiers',async({page,context})=>{
+ const legacy={...initialState(),catalogRevision:undefined,challenges:challenges.map((c,i)=>({...c,id:`topic-${i+1}`})),seen:['topic-1']};
+ await page.goto('/admin');
+ await page.getByLabel('Restore full backup').setInputFiles({name:'backup.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(legacy))});
+ await page.getByRole('button',{name:'Confirm import'}).click();
+ await expect(page.getByText('Backup restored.',{exact:true})).toBeVisible();
+ expect(await seen(page)).toEqual(['builtin:openai']);
+ const other=await context.newPage();
+ await other.goto('/challenge');
+ await expect(other.getByRole('heading',{name:'WHAT WILL YOU STUDY?'})).toBeVisible();
+ await other.evaluate(value=>localStorage.setItem('thirty-minute:v1',JSON.stringify(value)),{...legacy,seen:['topic-2']});
+ await expect.poll(()=>page.locator('.admin-row').count()).toBe(177);
+ // Updating through the UI writes the normalized in-memory state from the storage event.
+ await page.getByRole('button',{name:'Duplicate OpenAI',exact:true}).click();
+ expect(await seen(page)).toEqual(['builtin:anthropic']);
 });
