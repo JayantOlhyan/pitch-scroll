@@ -72,3 +72,17 @@ test('invalid backups are rejected without mutating their input',()=>{
  assert.throws(()=>normalizeState(raw));
  assert.equal(JSON.stringify(raw),before);
 });
+
+
+test('expanded legacy catalogs keep deletions of newly introduced topics',()=>{
+ const state=normalizeState(legacy(expanded.filter(c=>c.slug!=='groq')));
+ assert.equal(state.challenges.some(c=>c.slug==='groq'),false);
+ assert.equal(state.challenges.length,176);
+});
+
+test('edited slugs do not change an established built-in identity',()=>{
+ const list=structuredClone(previous.filter(c=>c.slug!=='openai'));
+ list.find(c=>c.slug==='github')!.slug='openai';
+ const state=normalizeState(legacy(list));
+ assert.equal(state.challenges.find(c=>c.slug==='openai')?.id,'builtin:github');
+});

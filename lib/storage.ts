@@ -24,6 +24,7 @@ function legacyAliases(list:Challenge[]):Map<string,string> {
  const orders = [legacyCatalogSlugs as readonly string[],challenges.map(c=>c.slug)];
  const matches = (order:readonly string[])=>list.filter(c=>legacyId.test(c.id) && order[Number(c.id.slice(6))-1]===c.slug).length;
  const order = matches(orders[1]) > matches(orders[0]) ? orders[1] : orders[0];
+ if (matches(order) === 0) return new Map();
  return new Map(order.map((slug,i)=>[`topic-${i+1}`,`builtin:${slug}`]));
 }
 
@@ -37,12 +38,18 @@ export function normalizeState(raw:unknown):AppState {
  const state = stateSchema.parse(raw);
  const aliases = legacyAliases(state.challenges);
  const stable = (c:Challenge)=>stableChallenge(c,aliases);
- const idMap = new Map(state.challenges.map(c => [c.id,stable(c).id]));
+ const stableLibrary = (c:Challenge)=>legacyId.test(c.id) && aliases.has(c.id) ? {...c,id:aliases.get(c.id)!} : stable(c);
+ const snapshot = (c:Challenge)=>{
+  const entry=state.challenges.find(item=>item.id===c.id && item.slug===c.slug);
+  return entry ? {...c,id:stableLibrary(entry).id} : stable(c);
+ };
+ const idMap = new Map(state.challenges.map(c => [c.id,stableLibrary(c).id]));
  for (const session of state.sessions) {
-  if (!idMap.has(session.challenge.id)) idMap.set(session.challenge.id,stable(session.challenge).id);
+  if (!idMap.has(session.challenge.id)) idMap.set(session.challenge.id,snapshot(session.challenge).id);
  }
- const list = state.challenges.map(stable);
- if ((state.catalogRevision ?? 0) < CATALOG_REVISION) {
+ const list = state.challenges.map(stableLibrary);
+ const alreadyExpanded = aliases.size === challenges.length;
+ if ((state.catalogRevision ?? 0) < CATALOG_REVISION && !alreadyExpanded) {
   const ids = new Set(list.map(c=>c.id));
   const slugs = new Set(list.map(c=>c.slug));
   // Missing old topics may have been intentionally deleted or excluded by an import.
@@ -50,8 +57,11 @@ export function normalizeState(raw:unknown):AppState {
    if (!legacySlugs.has(c.slug) && !ids.has(c.id) && !slugs.has(c.slug)) list.push(c);
   }
  }
+ if (new Set(list.map(c=>c.id)).size !== list.length || new Set(list.map(c=>c.slug)).size !== list.length) {
+  throw new Error('Saved challenge IDs and slugs must be unique.');
+ }
  return {...state,catalogRevision:Math.max(state.catalogRevision ?? 0,CATALOG_REVISION),challenges:list,
-  sessions:state.sessions.map(s=>({...s,challenge:stable(s.challenge)})),
+  sessions:state.sessions.map(s=>({...s,challenge:snapshot(s.challenge)})),
   seen:[...new Set(state.seen.map(id=>idMap.get(id) ?? (legacyId.test(id)?`legacy:${id}`:id)))]};
 }
 
