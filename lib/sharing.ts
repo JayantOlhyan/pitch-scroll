@@ -1,0 +1,18 @@
+import { Session } from '@/types';
+import { downloadBlob } from './storage';
+import { formatTime,score } from './engine';
+export function shareToken(s:Session){const data={...s,notes:{},reflections:['','','',s.reflections[3]]};return btoa(String.fromCharCode(...new TextEncoder().encode(JSON.stringify(data))));}
+export function decodeShare(token:string){if(token.length>50000)throw new Error('Share link is too large');return JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(token),c=>c.charCodeAt(0))));}
+export async function renderResult(s:Session):Promise<Blob>{
+ const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1350;const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Image export is unavailable in this browser.');
+ ctx.fillStyle='#0b0e0e';ctx.fillRect(0,0,1080,1350);ctx.fillStyle='#ff642c';ctx.fillRect(64,64,8,48);
+ ctx.font='bold 34px Arial';ctx.fillText('30 MINUTE',92,102);ctx.font='20px monospace';ctx.fillStyle='#adb5b3';ctx.fillText(`TEST #${String(s.number).padStart(3,'0')} / ${s.practice?'PRACTICE':'COMPLETED'}`,64,180);
+ const wrap=(text:string,y:number,width:number,line:number,max:number)=>{let row='',lines=0;for(const word of text.split(/\s+/)){if(ctx.measureText(row+word).width>width&&row){ctx.fillText(row.trim(),64,y);y+=line;lines++;row='';if(lines>=max){ctx.fillText('…',64,y);return y+line;}}row+=word+' ';}ctx.fillText(row.trim(),64,y);return y+line;};
+ ctx.fillStyle='#f3f1ec';ctx.font='bold 80px Arial';let y=wrap(s.challenge.title,290,930,90,3);ctx.font='24px monospace';ctx.fillStyle='#adb5b3';ctx.fillText(`${s.challenge.category} / ${s.challenge.difficulty}`,64,y+12);y+=110;
+ ctx.strokeStyle='#303636';ctx.beginPath();ctx.moveTo(64,y);ctx.lineTo(1016,y);ctx.stroke();y+=70;
+ ['RESEARCH','PITCH','SELF SCORE'].forEach((v,i)=>{ctx.fillStyle='#adb5b3';ctx.font='20px monospace';ctx.fillText(v,64+i*320,y);ctx.fillStyle=i===2?'#ff642c':'#f3f1ec';ctx.font='bold 62px Arial';ctx.fillText([formatTime(s.researchSeconds),formatTime(s.pitchSeconds),score(s).toFixed(1)+'/10'][i],64+i*320,y+75);});y+=150;
+ ctx.font='20px monospace';ctx.fillStyle='#ff642c';ctx.fillText('KEY TAKEAWAY',64,y);ctx.font='30px Arial';ctx.fillStyle='#f3f1ec';wrap(s.reflections[3]||'A new perspective, earned in 35 minutes.',y+58,930,44,7);
+ ctx.font='20px monospace';ctx.fillStyle='#adb5b3';ctx.fillText('30 MINUTES TO UNDERSTAND. 5 MINUTES TO PITCH.',64,1260);
+ return await new Promise<Blob>((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('Could not export the image.')),'image/png'));
+}
+export function contentAssets(s:Session){const t=s.challenge.title;const insight=s.reflections[3];return [['YouTube title',`I Had 30 Minutes to Figure Out How ${t} Works`],['YouTube hook',`One unfamiliar subject: ${t}. Thirty minutes to research it. Five minutes to explain what I actually understood.`],['Instagram Reel hook',`Could you explain ${t} after just 30 minutes? Here’s my attempt.`],['Instagram caption angle',`30 minutes. One unfamiliar subject. Five minutes to explain it.\n\n${insight||`Today's subject: ${t}. The real test was explaining it clearly.`}\n\n#30Minute #LearnInPublic`],['LinkedIn post angle',`I gave myself 30 minutes to understand ${t}.\n\n${insight||'The exercise exposed the difference between recognizing a concept and being able to explain it.'}\n\nWhat would you investigate next?`],['Short description',`30 MINUTE TEST #${String(s.number).padStart(3,'0')}: ${t}. A timed research and communication challenge. Self-assessed ${score(s).toFixed(1)}/10.`]];}

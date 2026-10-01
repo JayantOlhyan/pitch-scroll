@@ -1,0 +1,22 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {advance,createSession,remaining,pause,choose,dailyChallenge,statistics,dateKey,score} from '../lib/engine';
+import {challenges} from '../data/challenges';
+import {parseChallenges,initialState,stateSchema,sessionSchema} from '../lib/storage';
+import {decodeShare,shareToken,contentAssets} from '../lib/sharing';
+const start=1000000;const make=()=>createSession(challenges[0],1,start);
+test('dataset has 131 unique structured challenges with source URLs',()=>{const data=parseChallenges(challenges);assert.equal(data.length,131);assert.equal(new Set(data.map(c=>c.slug)).size,131);assert.ok(data.every(c=>c.sources.length&&c.researchQuestions.length>=10));});
+test('research begins at exactly 30:00 and survives serialization',()=>{const s=make();assert.equal(remaining(s,start),1800);const restored=sessionSchema.parse(JSON.parse(JSON.stringify(s)));assert.equal(remaining(restored,start+62500),1738);});
+test('research expiration starts pitch at the research deadline',()=>{const s=advance(make(),start+1800000);assert.equal(s.phase,'pitch');assert.equal(remaining(s,start+1800000),300);assert.equal(s.researchSeconds,1800);});
+test('inactive tab accounts for pitch time already elapsed',()=>{const s=advance(make(),start+1900000);assert.equal(s.phase,'pitch');assert.equal(remaining(s,start+1900000),200);});
+test('inactive tab after both deadlines goes straight to assessment',()=>{const s=advance(make(),start+2500000);assert.equal(s.phase,'assessment');assert.equal(s.pitchSeconds,300);assert.equal(s.researchSeconds,1800);});
+test('pause marks practice and excludes pause time',()=>{let s=pause(make(),start+60000);assert.equal(s.practice,true);assert.equal(remaining(s,start+999999),1740);assert.equal(advance(s,start+99999999),s);s=pause(s,start+160000);assert.equal(remaining(s,start+160000),1740);s=advance(s,start+200000,true);assert.equal(s.researchSeconds,100);assert.equal(s.phase,'pitch');});
+test('ending early records actual duration and gives a full pitch window',()=>{let s=advance(make(),start+125000,true);assert.equal(s.researchSeconds,125);assert.equal(remaining(s,start+125000),300);s=advance(s,start+165000,true);assert.equal(s.pitchSeconds,40);assert.equal(s.phase,'assessment');});
+test('random selection prioritizes unseen and avoids recent repeats',()=>{const pool=challenges.slice(0,6);assert.equal(choose(pool,[pool[0].id],[],()=>0).id,pool[1].id);assert.equal(choose(pool,pool.map(c=>c.id),[],()=>0).id,pool[0].id);assert.equal(choose([],[],[]),undefined);});
+test('daily selection is deterministic for a given date',()=>{assert.equal(dailyChallenge(challenges,'2026-10-01').id,dailyChallenge(challenges,'2026-10-01').id);});
+test('statistics aggregate real complete sessions and consecutive local days',()=>{const now=new Date();const yesterday=new Date();yesterday.setDate(now.getDate()-1);const s={...make(),phase:'complete' as const,completedAt:now.getTime(),scores:Array(8).fill(8),researchSeconds:1800,pitchSeconds:300};const prev={...s,id:'previous',completedAt:yesterday.getTime()};const stats=statistics([s,prev,make()]);assert.equal(stats.complete.length,2);assert.equal(stats.streak,2);assert.equal(stats.longest,2);assert.equal(stats.averageScore,8);assert.equal(stats.averageResearch,1800);});
+test('JSON import rejects duplicates, unsafe URLs and missing fields',()=>{assert.throws(()=>parseChallenges([challenges[0],challenges[0]]));assert.throws(()=>parseChallenges([{...challenges[0],sources:[{label:'unsafe',url:'javascript:alert(1)'}]}]));assert.throws(()=>parseChallenges([{title:'missing'}]));});
+test('full backup round trips notes and preferences',()=>{const state=initialState();const s=make();s.notes.Problem='A real note';state.sessions=[s];state.activeId=s.id;assert.deepEqual(stateSchema.parse(JSON.parse(JSON.stringify(state))),state);});
+test('Unicode share link round trips scorecard without private notes',()=>{const s={...make(),phase:'complete' as const,completedAt:start,notes:{Problem:'private note'},reflections:['private reflection','','','A takeaway — 日本語 🔍']};const restored=sessionSchema.parse(decodeShare(shareToken(s)));assert.deepEqual(restored.notes,{});assert.equal(restored.reflections[0],'');assert.equal(restored.reflections[3],s.reflections[3]);assert.equal(score(restored),5);assert.equal(contentAssets(s).length,6);});
+
+test('stale render clock cannot display more than the phase duration',()=>{assert.equal(remaining(make(),start-250),1800);});
