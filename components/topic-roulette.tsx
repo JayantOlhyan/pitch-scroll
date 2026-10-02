@@ -6,7 +6,24 @@ import { useApp } from '@/hooks/use-app';
 import { Challenge, challengeTypes, difficulties } from '@/types';
 import { choose, dailyChallenge, dateKey } from '@/lib/engine';
 import { number, SourceList } from './ui';
-import { Shuffle, ArrowRight, RotateCcw, Sparkles, SlidersHorizontal } from 'lucide-react';
+import {
+  Shuffle,
+  ArrowRight,
+  RotateCcw,
+  Sparkles,
+  SlidersHorizontal,
+  Zap,
+  Terminal,
+  Server,
+  Code2,
+  Cpu,
+  Shield,
+  AlertTriangle,
+  Layers,
+  Building2,
+  Compass,
+  Radio,
+} from 'lucide-react';
 
 interface TopicRouletteProps {
   initialCategory?: string;
@@ -16,29 +33,54 @@ interface TopicRouletteProps {
   onClose?: () => void;
 }
 
-const ITEM_HEIGHT = 120; // Height in pixels for each topic card in the reel (prominent & readable for reels)
+const ITEM_HEIGHT = 132; // Height in pixels for each topic card in the reel (prominent & readable)
 const VISIBLE_COUNT = 5; // Number of items visible in viewport
-const VIEWPORT_HEIGHT = ITEM_HEIGHT * VISIBLE_COUNT; // 600px
-const TOTAL_SLOTS = 52; // Number of slots in the reel before landing on target
+const VIEWPORT_HEIGHT = ITEM_HEIGHT * VISIBLE_COUNT; // 660px
+const TOTAL_SLOTS = 52; // Number of slots in the reel before landing on target (keeps slot 49 as winner for tests)
 const SPIN_DURATION_MS = 4800; // Duration of full dramatic spin
 
 // Semantic category colors for tags and glowing accents
 export const categoryColors: Record<string, { bg: string; text: string; border: string; glow: string }> = {
-  AI: { bg: '#0b1d3a', text: '#38bdf8', border: '#1e3a8a', glow: 'rgba(56, 189, 248, 0.4)' },
-  'Developer Tools': { bg: '#1e1138', text: '#a78bfa', border: '#4c1d95', glow: 'rgba(167, 139, 250, 0.4)' },
-  Infrastructure: { bg: '#08252a', text: '#22d3ee', border: '#155e75', glow: 'rgba(34, 211, 238, 0.4)' },
-  'Open Source': { bg: '#062817', text: '#34d399', border: '#065f46', glow: 'rgba(52, 211, 153, 0.4)' },
-  'Consumer Tech': { bg: '#2b0922', text: '#f472b6', border: '#831843', glow: 'rgba(244, 114, 182, 0.4)' },
-  'Indian Tech': { bg: '#2f1505', text: '#fb923c', border: '#9a3412', glow: 'rgba(251, 146, 60, 0.4)' },
-  'Engineering Systems': { bg: '#101438', text: '#818cf8', border: '#312e81', glow: 'rgba(129, 140, 248, 0.4)' },
-  Cybersecurity: { bg: '#062624', text: '#2dd4bf', border: '#115e59', glow: 'rgba(45, 212, 191, 0.4)' },
-  'Failure Cases': { bg: '#2f0d0d', text: '#f87171', border: '#7f1d1d', glow: 'rgba(248, 113, 113, 0.4)' },
-  Technology: { bg: '#08252a', text: '#22d3ee', border: '#0e7490', glow: 'rgba(34, 211, 238, 0.4)' },
-  'Business Models': { bg: '#2a2003', text: '#facc15', border: '#713f12', glow: 'rgba(250, 204, 21, 0.4)' },
+  AI: { bg: '#081a33', text: '#38bdf8', border: '#1d4ed8', glow: 'rgba(56, 189, 248, 0.45)' },
+  'Developer Tools': { bg: '#180d2e', text: '#c084fc', border: '#6b21a8', glow: 'rgba(192, 132, 252, 0.45)' },
+  Infrastructure: { bg: '#041f24', text: '#22d3ee', border: '#0e7490', glow: 'rgba(34, 211, 238, 0.45)' },
+  'Open Source': { bg: '#042214', text: '#34d399', border: '#047857', glow: 'rgba(52, 211, 153, 0.45)' },
+  'Consumer Tech': { bg: '#25071e', text: '#f472b6', border: '#9d174d', glow: 'rgba(244, 114, 182, 0.45)' },
+  'Indian Tech': { bg: '#291204', text: '#fb923c', border: '#c2410c', glow: 'rgba(251, 146, 60, 0.45)' },
+  'Engineering Systems': { bg: '#0d1033', text: '#818cf8', border: '#3730a3', glow: 'rgba(129, 140, 248, 0.45)' },
+  Cybersecurity: { bg: '#03201e', text: '#2dd4bf', border: '#0f766e', glow: 'rgba(45, 212, 191, 0.45)' },
+  'Failure Cases': { bg: '#270a0a', text: '#f87171', border: '#991b1b', glow: 'rgba(248, 113, 113, 0.45)' },
+  Technology: { bg: '#041f24', text: '#22d3ee', border: '#0e7490', glow: 'rgba(34, 211, 238, 0.45)' },
+  'Business Models': { bg: '#241a02', text: '#facc15', border: '#854d0e', glow: 'rgba(250, 204, 21, 0.45)' },
 };
 
 export function getCategoryStyle(cat: string) {
   return categoryColors[cat] || { bg: '#1f1b13', text: '#ff642c', border: '#7c2d12', glow: 'rgba(255, 100, 44, 0.35)' };
+}
+
+export function getCategoryIcon(cat: string) {
+  switch (cat) {
+    case 'AI':
+      return <Zap size={15} />;
+    case 'Developer Tools':
+      return <Terminal size={15} />;
+    case 'Infrastructure':
+      return <Server size={15} />;
+    case 'Open Source':
+      return <Code2 size={15} />;
+    case 'Engineering Systems':
+      return <Cpu size={15} />;
+    case 'Cybersecurity':
+      return <Shield size={15} />;
+    case 'Failure Cases':
+      return <AlertTriangle size={15} />;
+    case 'Business Models':
+      return <Layers size={15} />;
+    case 'Indian Tech':
+      return <Building2 size={15} />;
+    default:
+      return <Compass size={15} />;
+  }
 }
 
 export function TopicRoulette({
@@ -112,21 +154,17 @@ export function TopicRoulette({
 
   /**
    * Constructs the reel sequence:
-   * Pads with random challenges, placing the chosen targetChallenge at slot index `targetIndex`
+   * Pads with varied challenges, placing targetChallenge at slot index TOTAL_SLOTS - 3 (index 49)
    */
   const buildReel = useCallback(
     (targetChallenge: Challenge, pool: Challenge[]) => {
       const items: Challenge[] = [];
-      const safePool = pool;
-
       for (let i = 0; i < TOTAL_SLOTS; i++) {
         if (i === TOTAL_SLOTS - 3) {
-          // The winning challenge lands 3 items from the end
           items.push(targetChallenge);
         } else {
-          // Pick varied items from the pool
-          const randomIdx = Math.floor(Math.random() * safePool.length);
-          items.push(safePool[randomIdx]);
+          const randomIdx = Math.floor(Math.random() * pool.length);
+          items.push(pool[randomIdx]);
         }
       }
       return items;
@@ -136,8 +174,8 @@ export function TopicRoulette({
 
   /**
    * Custom easing function for the roulette:
-   * 1. Gentle launch (0 - 0.12)
-   * 2. High-speed spinning (0.12 - 0.45)
+   * 1. Gentle launch (0 - 0.15)
+   * 2. High-speed spinning (0.15 - 0.45)
    * 3. Gradual deceleration (0.45 - 0.85)
    * 4. Heavy deliberate near-stops (0.85 - 0.97)
    * 5. Final settle snap (0.97 - 1.0)
@@ -148,7 +186,6 @@ export function TopicRoulette({
 
     // Phase 1: Ramp up
     if (t < 0.15) {
-      // Ease in cubic
       const p = t / 0.15;
       return 0.12 * Math.pow(p, 2.5);
     }
@@ -162,7 +199,6 @@ export function TopicRoulette({
     // Phase 3 & 4: Deceleration (quartic ease-out)
     const p = (t - 0.45) / 0.55;
     const remainingDistance = 1 - 0.58;
-    // Cubic/quartic ease out
     const easeOut = 1 - Math.pow(1 - p, 3.2);
     return 0.58 + remainingDistance * easeOut;
   };
@@ -189,7 +225,6 @@ export function TopicRoulette({
     setJustLocked(false);
 
     // Target scroll lands the winning item in the center window
-    // Winning item is at index `TOTAL_SLOTS - 3`
     const targetIndex = TOTAL_SLOTS - 3;
     const targetY = targetIndex * ITEM_HEIGHT;
     targetScrollRef.current = targetY;
@@ -213,7 +248,7 @@ export function TopicRoulette({
         recorded = true;
         if (!immediate) rouletteHit();
         play('reveal');
-        update(s => ({...s, seen: [...s.seen.filter(id => id !== selected.id), selected.id]}));
+        update((s) => ({ ...s, seen: [...s.seen.filter((id) => id !== selected.id), selected.id] }));
       }
       if (immediate) reveal();
       else revealTimerRef.current = setTimeout(reveal, 650);
@@ -268,7 +303,18 @@ export function TopicRoulette({
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if ((e.target as HTMLElement)?.closest('input,textarea,select,[contenteditable],button,a,[role=button]')) return;
-      if (!isDaily && !e.metaKey && !e.ctrlKey && !e.altKey && !e.shiftKey && !e.repeat && !spinningRef.current && !revealed && candidatePool.length > 0 && (e.code === 'Space' || e.code === 'Enter')) {
+      if (
+        !isDaily &&
+        !e.metaKey &&
+        !e.ctrlKey &&
+        !e.altKey &&
+        !e.shiftKey &&
+        !e.repeat &&
+        !spinningRef.current &&
+        !revealed &&
+        candidatePool.length > 0 &&
+        (e.code === 'Space' || e.code === 'Enter')
+      ) {
         e.preventDefault();
         spinRoulette();
       }
@@ -289,8 +335,16 @@ export function TopicRoulette({
 
   const centerItemIndex = Math.floor((scrollY + ITEM_HEIGHT / 2) / ITEM_HEIGHT);
 
+  const categories = useMemo(
+    () => [...new Set(state.challenges.map((c) => c.category))],
+    [state.challenges]
+  );
+
   return (
     <div className="topic-roulette-container">
+      {/* Ambient background glow ring */}
+      <div className="roulette-ambient-halo" aria-hidden="true" />
+
       {/* Top Header / Mode Banner */}
       <div className="roulette-header">
         <div className="roulette-eyebrow">
@@ -298,7 +352,13 @@ export function TopicRoulette({
           <span className="mono">
             {isDaily ? `DAILY CHALLENGE · ${dateKey()}` : '30 MINUTE · WHAT WILL YOU STUDY'}
           </span>
+          <span className="hud-sep">·</span>
+          <span className="mono pool-pill">
+            <Radio size={12} className="pulse-icon" />
+            {candidatePool.length} {candidatePool.length === 1 ? 'TOPIC' : 'TOPICS'} ACTIVE
+          </span>
         </div>
+
         <h1 className="roulette-title">
           {revealed
             ? 'WHAT YOU WILL STUDY'
@@ -306,6 +366,7 @@ export function TopicRoulette({
             ? 'SELECTING TOPIC…'
             : 'WHAT WILL YOU STUDY?'}
         </h1>
+
         <p className="roulette-subtitle">
           {revealed
             ? 'Your 30-minute deep-dive study challenge. Connect the dots and form your mental model.'
@@ -316,14 +377,70 @@ export function TopicRoulette({
       {/* Filter Toolbar (Visible when not spinning and not revealed) */}
       {!isSpinning && !revealed && !isDaily && (
         <div className="roulette-controls-bar">
-          <button
-            className={`button quiet filter-toggle ${showFilters ? 'active' : ''}`}
-            onClick={() => setShowFilters(!showFilters)}
-            aria-label="Toggle roulette filters"
-          >
-            <SlidersHorizontal size={15} />
-            <span>Filters {category || difficulty || type ? '(Active)' : ''}</span>
-          </button>
+          {/* Quick Category Chips */}
+          <div className="quick-category-chips" role="tablist" aria-label="Quick category selector">
+            <button
+              className={`chip ${!category ? 'active' : ''}`}
+              onClick={() => setCategory('')}
+              type="button"
+            >
+              <span>All Topics</span>
+              <span className="chip-count mono">{state.challenges.length}</span>
+            </button>
+            {categories.slice(0, 7).map((cat) => {
+              const catCount = state.challenges.filter((c) => c.category === cat).length;
+              const isSelected = category === cat;
+              const style = getCategoryStyle(cat);
+              return (
+                <button
+                  key={cat}
+                  className={`chip ${isSelected ? 'active' : ''}`}
+                  onClick={() => setCategory(isSelected ? '' : cat)}
+                  type="button"
+                  style={
+                    isSelected
+                      ? {
+                          borderColor: style.border,
+                          backgroundColor: style.bg,
+                          color: style.text,
+                          boxShadow: `0 0 16px ${style.glow}`,
+                        }
+                      : undefined
+                  }
+                >
+                  <span className="chip-icon">{getCategoryIcon(cat)}</span>
+                  <span>{cat}</span>
+                  <span className="chip-count mono">{catCount}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="filter-actions-row">
+            <button
+              className={`button quiet filter-toggle ${showFilters ? 'active' : ''}`}
+              onClick={() => setShowFilters(!showFilters)}
+              aria-label="Toggle roulette filters"
+              type="button"
+            >
+              <SlidersHorizontal size={15} />
+              <span>Fine-Tune Filters {category || difficulty || type ? '(Active)' : ''}</span>
+            </button>
+
+            {(category || difficulty || type) && (
+              <button
+                className="button quiet reset-btn"
+                onClick={() => {
+                  setCategory('');
+                  setDifficulty('');
+                  setType('');
+                }}
+                type="button"
+              >
+                Reset All Filters
+              </button>
+            )}
+          </div>
 
           {showFilters && (
             <div className="roulette-filter-row">
@@ -331,7 +448,7 @@ export function TopicRoulette({
                 <span>Category</span>
                 <select value={category} onChange={(e) => setCategory(e.target.value)}>
                   <option value="">All Categories ({state.challenges.length})</option>
-                  {[...new Set(state.challenges.map((c) => c.category))].map((cat) => (
+                  {categories.map((cat) => (
                     <option key={cat} value={cat}>
                       {cat} ({state.challenges.filter((c) => c.category === cat).length})
                     </option>
@@ -362,35 +479,40 @@ export function TopicRoulette({
                   ))}
                 </select>
               </label>
-
-              {(category || difficulty || type) && (
-                <button
-                  className="button quiet reset-btn"
-                  onClick={() => {
-                    setCategory('');
-                    setDifficulty('');
-                    setType('');
-                  }}
-                >
-                  Clear
-                </button>
-              )}
             </div>
           )}
-
-          <div className="pool-counter mono muted">
-            {candidatePool.length} {candidatePool.length === 1 ? 'topic' : 'topics'} in pool
-          </div>
         </div>
       )}
 
       {!isDaily && !revealed && candidatePool.length === 0 && (
-        <p role="status" className="notice">No topics match these filters. Change or clear your filters to spin.</p>
+        <p role="status" className="notice">
+          No topics match these filters. Change or clear your filters to spin.
+        </p>
       )}
 
       {/* Main Roulette Mechanism / Viewport */}
       {!revealed && (
         <div className="roulette-machine-box">
+          {/* Machine Header Telemetry Strip */}
+          <div className="roulette-hud-strip">
+            <div className="hud-left mono">
+              <span className="hud-led-green" />
+              <span>ROULETTE CORE // ACTIVE</span>
+            </div>
+            <div className="hud-center mono">
+              <span className="muted">ROTATION:</span> 4.8S DUAL-CURVE · <span className="muted">SLOTS:</span> 52 NODES
+            </div>
+            <div className="hud-right mono">
+              <span className="muted">TARGET POOL:</span> <strong className="orange">{candidatePool.length}</strong>
+            </div>
+          </div>
+
+          {/* Corner Tech Marks */}
+          <span className="hud-corner top-left" aria-hidden="true" />
+          <span className="hud-corner top-right" aria-hidden="true" />
+          <span className="hud-corner bottom-left" aria-hidden="true" />
+          <span className="hud-corner bottom-right" aria-hidden="true" />
+
           {/* Mechanical Wheel Housing Frame */}
           <div className="roulette-reel-viewport" style={{ height: `${VIEWPORT_HEIGHT}px` }}>
             {/* Top & Bottom Vignette / Shadow Overlay */}
@@ -399,11 +521,24 @@ export function TopicRoulette({
 
             {/* Central Target Window Brackets */}
             <div className={`selection-window ${isSpinning ? 'spinning' : ''} ${justLocked ? 'locked' : ''}`}>
-              <div className="bracket bracket-left" />
-              <div className="bracket bracket-right" />
-              <div className="center-reticle" />
+              <div className="bracket bracket-left">
+                <span className="bracket-notch top" />
+                <span className="bracket-notch bottom" />
+              </div>
+              <div className="bracket bracket-right">
+                <span className="bracket-notch top" />
+                <span className="bracket-notch bottom" />
+              </div>
+              <div className="laser-guideline" />
               <div className="center-tag mono">
-                {isSpinning ? 'SPINNING…' : justLocked ? 'STUDY TOPIC LOCKED' : 'TOPIC TO STUDY'}
+                <span className="tag-indicator" />
+                <span>
+                  {isSpinning
+                    ? 'SCANNING CANDIDATES…'
+                    : justLocked
+                    ? 'STUDY TOPIC LOCKED'
+                    : 'TOPIC TO STUDY'}
+                </span>
               </div>
             </div>
 
@@ -412,13 +547,21 @@ export function TopicRoulette({
               className="reel-track"
               style={{
                 transform: `translate3d(0, -${scrollY - (VIEWPORT_HEIGHT - ITEM_HEIGHT) / 2}px, 0)`,
-                transition: isSpinning ? 'none' : 'transform 0.15s ease-out',
+                transition: isSpinning ? 'none' : 'transform 0.18s cubic-bezier(0.16, 1, 0.3, 1)',
               }}
             >
               {(reelItems.length > 0 ? reelItems : state.challenges.slice(0, 15)).map((topic, idx) => {
-                const isCentered = idx === centerItemIndex;
-                const distance = Math.abs(idx - centerItemIndex);
+                const diff = idx - centerItemIndex;
+                const distance = Math.abs(diff);
+                const isCentered = distance === 0;
                 const style = getCategoryStyle(topic.category);
+
+                // 3D Cylinder Curvature Transform
+                const rotateX = isCentered ? 0 : diff < 0 ? Math.min(22, distance * 11) : -Math.min(22, distance * 11);
+                const translateZ = isCentered ? 36 : -distance * 22;
+                const scale = isCentered ? 1.04 : Math.max(0.86, 1 - distance * 0.05);
+                const opacity = isCentered ? 1 : Math.max(0.18, 1 - distance * 0.28);
+                const blur = isCentered ? 0 : Math.min(2.5, distance * 0.75);
 
                 return (
                   <div
@@ -426,11 +569,22 @@ export function TopicRoulette({
                     className={`reel-card ${isCentered ? 'active' : ''}`}
                     style={{
                       height: `${ITEM_HEIGHT}px`,
-                      opacity: isCentered ? 1 : Math.max(0.2, 1 - distance * 0.28),
-                      transform: isCentered ? 'scale(1.03)' : `scale(${Math.max(0.85, 1 - distance * 0.05)})`,
+                      opacity,
+                      transform: `perspective(1200px) rotateX(${rotateX}deg) translateZ(${translateZ}px) scale(${scale})`,
+                      filter: blur > 0 ? `blur(${blur}px)` : undefined,
                     }}
                   >
-                    <div className="reel-card-inner">
+                    <div
+                      className="reel-card-inner"
+                      style={
+                        isCentered
+                          ? {
+                              borderColor: style.border,
+                              boxShadow: `0 14px 45px rgba(0, 0, 0, 0.9), 0 0 35px ${style.glow}, inset 0 1px 0 rgba(255, 255, 255, 0.2)`,
+                            }
+                          : undefined
+                      }
+                    >
                       <div className="reel-meta">
                         <span className="reel-num mono">#{number(topic.number)}</span>
                         <span
@@ -439,14 +593,24 @@ export function TopicRoulette({
                             backgroundColor: style.bg,
                             color: style.text,
                             borderColor: style.border,
+                            boxShadow: isCentered ? `0 0 14px ${style.glow}` : undefined,
                           }}
                         >
-                          {topic.category}
+                          {getCategoryIcon(topic.category)}
+                          <span>{topic.category}</span>
                         </span>
-                        <span className="reel-diff mono muted">{topic.difficulty}</span>
+                        <span className={`reel-diff mono diff-${topic.difficulty.toLowerCase()}`}>
+                          {topic.difficulty}
+                        </span>
                       </div>
-                      <div className="reel-title">{topic.title}</div>
-                      <div className="reel-type mono muted">{topic.type}</div>
+
+                      <div className="reel-title" title={topic.title}>
+                        {topic.title}
+                      </div>
+
+                      <div className="reel-type mono">
+                        <span className="type-badge">{topic.type}</span>
+                      </div>
                     </div>
                   </div>
                 );
@@ -461,18 +625,23 @@ export function TopicRoulette({
                 className="button primary big spin-btn"
                 onClick={spinRoulette}
                 disabled={candidatePool.length === 0}
+                type="button"
               >
-                <Shuffle size={20} className="spin-icon" />
-                <span>SPIN TOPIC ROULETTE</span>
+                <span className="btn-glow-aura" />
+                <Shuffle size={22} className="spin-icon" />
+                <span className="spin-btn-label">SPIN TOPIC ROULETTE</span>
                 <span className="shortcut mono">Space</span>
               </button>
+              <div className="spin-keycap-hint mono">
+                <span>PRESS <kbd>SPACE</kbd> OR <kbd>ENTER</kbd> TO SPIN</span>
+              </div>
             </div>
           )}
 
           {isSpinning && (
             <div className="roulette-status-indicator mono">
               <span className="ticking-indicator" />
-              <span>DECELERATING SELECTOR…</span>
+              <span>HIGH SPEED SELECTOR DECELERATING…</span>
             </div>
           )}
         </div>
@@ -490,9 +659,11 @@ export function TopicRoulette({
                 backgroundColor: getCategoryStyle(winner.category).bg,
                 color: getCategoryStyle(winner.category).text,
                 borderColor: getCategoryStyle(winner.category).border,
+                boxShadow: `0 0 20px ${getCategoryStyle(winner.category).glow}`,
               }}
             >
-              {winner.category}
+              {getCategoryIcon(winner.category)}
+              <span>{winner.category}</span>
             </span>
             <span className="badge difficulty-badge">{winner.difficulty}</span>
             <span className="mono muted">{winner.type}</span>
@@ -506,7 +677,7 @@ export function TopicRoulette({
 
           <div className="reveal-mission-box">
             <div className="mission-label mono">
-              <Sparkles size={14} className="orange" />
+              <Sparkles size={16} className="orange" />
               <span>THE 30-MINUTE STUDY MISSION</span>
             </div>
             <p className="mission-text">{winner.mission}</p>
@@ -542,20 +713,23 @@ export function TopicRoulette({
                     `/${activeSession.phase === 'research' ? 'research' : activeSession.phase === 'pitch' ? 'pitch' : 'result'}/${activeSession.id}`
                   )
                 }
+                type="button"
               >
                 Resume Active Session
               </button>
             </div>
           ) : (
             <div className="reveal-cta-bar">
-              <button className="button primary big start-30-btn" onClick={handleStartSession}>
+              <button className="button primary big start-30-btn" onClick={handleStartSession} type="button">
                 <span>START 30:00 STUDY</span>
-                <ArrowRight size={20} />
+                <ArrowRight size={22} />
               </button>
-              {!isDaily && <button className="button quiet re-spin-btn" onClick={spinRoulette}>
-                <RotateCcw size={16} />
-                <span>Spin Again</span>
-              </button>}
+              {!isDaily && (
+                <button className="button quiet re-spin-btn" onClick={spinRoulette} type="button">
+                  <RotateCcw size={16} />
+                  <span>Spin Again</span>
+                </button>
+              )}
             </div>
           )}
 
