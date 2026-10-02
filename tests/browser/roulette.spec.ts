@@ -95,7 +95,7 @@ test('keyboard activation of filter controls does not trigger a spin',async({pag
  await filter.focus();
  await page.keyboard.press('Enter');
  await expect(page.getByRole('combobox',{name:'Category',exact:true})).toBeVisible();
- await expect(page.getByRole('heading',{name:'WHAT WILL YOU STUDY?'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'WHAT WILL YOU PITCH?'})).toBeVisible();
  expect(await seen(page)).toEqual([]);
 });
 
@@ -103,16 +103,16 @@ test('legacy browser storage upgrades and stays migrated after reload',async({pa
  const state={...initialState(),catalogRevision:undefined,challenges:challenges.map((c,i)=>({...c,id:`topic-${i+1}`})),seen:['topic-1']};
  await page.addInitScript(value=>{if(!localStorage.getItem('thirty-minute:v1'))localStorage.setItem('thirty-minute:v1',JSON.stringify(value));},state);
  await page.goto('/challenge');
- await expect(page.getByRole('heading',{name:'WHAT WILL YOU STUDY?'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'WHAT WILL YOU PITCH?'})).toBeVisible();
  expect(await seen(page)).toEqual(['builtin:openai']);
  await page.reload();
- await expect(page.getByRole('heading',{name:'WHAT WILL YOU STUDY?'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'WHAT WILL YOU PITCH?'})).toBeVisible();
  expect(await seen(page)).toEqual(['builtin:openai']);
 });
 
 test('spin stays locked throughout the delayed reveal',async({page})=>{
  await page.goto('/challenge');
- await expect(page.getByRole('heading',{name:'WHAT WILL YOU STUDY?'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'WHAT WILL YOU PITCH?'})).toBeVisible();
  await page.clock.install();
  await page.getByRole('button',{name:/SPIN TOPIC ROULETTE/}).click();
  await page.clock.runFor(4850);
@@ -127,14 +127,14 @@ test('spin stays locked throughout the delayed reveal',async({page})=>{
 
 test('leaving during a spin cancels callbacks and preserves unseen topics',async({page})=>{
  await page.goto('/challenge');
- await expect(page.getByRole('heading',{name:'WHAT WILL YOU STUDY?'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'WHAT WILL YOU PITCH?'})).toBeVisible();
  await page.clock.install();
  await page.getByRole('button',{name:/SPIN TOPIC ROULETTE/}).click();
  await page.getByRole('link',{name:'About',exact:true}).click();
  await page.clock.runFor(6000);
  expect(await seen(page)).toEqual([]);
  await page.getByRole('link',{name:/Start challenge/}).click();
- await expect(page.getByRole('heading',{name:'WHAT WILL YOU STUDY?'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'WHAT WILL YOU PITCH?'})).toBeVisible();
 });
 
 test('backup restoration and cross-tab updates normalize legacy identifiers',async({page,context})=>{
@@ -146,7 +146,7 @@ test('backup restoration and cross-tab updates normalize legacy identifiers',asy
  expect(await seen(page)).toEqual(['builtin:openai']);
  const other=await context.newPage();
  await other.goto('/challenge');
- await expect(other.getByRole('heading',{name:'WHAT WILL YOU STUDY?'})).toBeVisible();
+ await expect(other.getByRole('heading',{name:'WHAT WILL YOU PITCH?'})).toBeVisible();
  await other.evaluate(value=>localStorage.setItem('thirty-minute:v1',JSON.stringify(value)),{...legacy,seen:['topic-2']});
  await expect.poll(()=>page.locator('.admin-row').count()).toBe(177);
  // Updating through the UI writes the normalized in-memory state from the storage event.
