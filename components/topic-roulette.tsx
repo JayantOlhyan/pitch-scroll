@@ -23,6 +23,7 @@ import {
   Building2,
   Compass,
   Radio,
+  Trash2,
 } from 'lucide-react';
 
 interface TopicRouletteProps {
@@ -89,7 +90,7 @@ export function TopicRoulette({
   initialType = '',
   isDaily = false,
 }: TopicRouletteProps) {
-  const { state, update, start, rouletteTick, rouletteHit, play } = useApp();
+  const { state, update, start, deleteSession, discardAndStart, rouletteTick, rouletteHit, play } = useApp();
   const router = useAppRouter();
 
   // Filters
@@ -115,6 +116,7 @@ export function TopicRoulette({
   const [reelItems, setReelItems] = useState<Challenge[]>([]);
   const [scrollY, setScrollY] = useState(0);
   const [justLocked, setJustLocked] = useState(false);
+  const [confirmAction, setConfirmAction] = useState<'discard-and-start' | 'delete-only' | null>(null);
 
   const animRef = useRef<number | null>(null);
   const revealTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -223,6 +225,7 @@ export function TopicRoulette({
     setRevealed(false);
     setIsSpinning(true);
     setJustLocked(false);
+    setConfirmAction(null);
 
     // Target scroll lands the winning item in the center window
     const targetIndex = TOTAL_SLOTS - 3;
@@ -331,6 +334,20 @@ export function TopicRoulette({
     if (!winner) return;
     const sessionId = start(winner);
     router.push(`/research/${sessionId}`);
+  };
+
+  // Discard previous active session and start this new challenge immediately
+  const handleDiscardAndStartNew = () => {
+    if (!winner || !activeSession) return;
+    const sessionId = discardAndStart(activeSession.id, winner);
+    router.push(`/research/${sessionId}`);
+  };
+
+  // Delete previous active session only (clears active session so user can re-spin or choose freely)
+  const handleDeletePreviousOnly = () => {
+    if (!activeSession) return;
+    deleteSession(activeSession.id);
+    setConfirmAction(null);
   };
 
   const centerItemIndex = Math.floor((scrollY + ITEM_HEIGHT / 2) / ITEM_HEIGHT);
@@ -703,20 +720,104 @@ export function TopicRoulette({
 
           {activeSession ? (
             <div className="active-session-warning notice">
-              <p>
-                <strong>Unfinished Session in Progress:</strong> You have an active {activeSession.challenge.title} challenge. Finish or end it before starting another timed run.
-              </p>
-              <button
-                className="button primary"
-                onClick={() =>
-                  router.push(
-                    `/${activeSession.phase === 'research' ? 'research' : activeSession.phase === 'pitch' ? 'pitch' : 'result'}/${activeSession.id}`
-                  )
-                }
-                type="button"
-              >
-                Resume Active Session
-              </button>
+              <div className="active-session-header">
+                <AlertTriangle size={20} className="warning-icon orange" />
+                <p>
+                  <strong>Unfinished Session in Progress:</strong> You have an active{' '}
+                  <span className="active-session-title">{activeSession.challenge.title}</span> challenge.
+                  Resume it, or start over fresh with a new session.
+                </p>
+              </div>
+
+              {confirmAction === null && (
+                <div className="active-session-actions">
+                  <button
+                    className="button primary active-session-resume-btn"
+                    onClick={() =>
+                      router.push(
+                        `/${activeSession.phase === 'research' ? 'research' : activeSession.phase === 'pitch' ? 'pitch' : 'result'}/${activeSession.id}`
+                      )
+                    }
+                    type="button"
+                  >
+                    <ArrowRight size={17} />
+                    <span>Resume Active Session</span>
+                  </button>
+
+                  <button
+                    className="button danger-outline active-session-discard-start-btn"
+                    onClick={() => setConfirmAction('discard-and-start')}
+                    type="button"
+                  >
+                    <Trash2 size={16} />
+                    <span>Start Over & Delete Previous</span>
+                  </button>
+
+                  <button
+                    className="button quiet text-danger active-session-delete-only-btn"
+                    onClick={() => setConfirmAction('delete-only')}
+                    type="button"
+                  >
+                    <span>Delete Previous Session</span>
+                  </button>
+                </div>
+              )}
+
+              {confirmAction === 'discard-and-start' && (
+                <div className="active-session-confirm-box">
+                  <div className="confirm-text">
+                    <p>
+                      <strong>Start over with a new study?</strong> This will permanently delete your unfinished session and notes for{' '}
+                      <strong>{activeSession.challenge.title}</strong> and start a new 30:00 study on <strong>{winner.title}</strong>.
+                    </p>
+                  </div>
+                  <div className="confirm-actions">
+                    <button
+                      className="button danger-solid"
+                      onClick={handleDiscardAndStartNew}
+                      type="button"
+                    >
+                      <Trash2 size={15} />
+                      <span>Yes, Delete & Start New (30:00)</span>
+                    </button>
+                    <button
+                      className="button quiet"
+                      onClick={() => setConfirmAction(null)}
+                      type="button"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {confirmAction === 'delete-only' && (
+                <div className="active-session-confirm-box">
+                  <div className="confirm-text">
+                    <p>
+                      <strong>Delete unfinished session?</strong> This will permanently delete{' '}
+                      <strong>{activeSession.challenge.title}</strong> from this device so you can start or spin freely.
+                    </p>
+                  </div>
+                  <div className="confirm-actions">
+                    <button
+                      className="button danger-solid"
+                      onClick={handleDeletePreviousOnly}
+                      type="button"
+                    >
+                      <Trash2 size={15} />
+                      <span>Yes, Delete Session</span>
+                    </button>
+                    <button
+                      className="button quiet"
+                      onClick={() => setConfirmAction(null)}
+                      type="button"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="reveal-cta-bar">
