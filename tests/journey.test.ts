@@ -134,3 +134,57 @@ test('all 10 research sections and 8 score dimensions match specification', () =
   assert.equal(scoreLabels.length, 8);
   assert.equal(reflectionLabels.length, 4);
 });
+
+test('discard active unfinished session and start over with a new challenge', () => {
+  const state = initialState();
+  const c1 = state.challenges[0];
+  const c2 = state.challenges[1];
+
+  // 1. User starts session for c1
+  const session1 = createSession(c1, 1, 1000);
+  state.sessions.push(session1);
+  state.activeId = session1.id;
+  state.seen.push(c1.id);
+
+  assert.equal(state.sessions.length, 1);
+  assert.equal(state.activeId, session1.id);
+
+  // 2. User lands on c2 in roulette and chooses "Start Over & Delete Previous"
+  // Simulating discardAndStart:
+  const filtered = state.sessions.filter((s) => s.id !== session1.id);
+  const session2 = createSession(c2, Math.max(0, ...filtered.map((s) => s.number)) + 1, 2000);
+  state.sessions = [session2, ...filtered];
+  state.activeId = session2.id;
+  state.seen = [...state.seen.filter((id) => id !== c2.id), c2.id];
+
+  // Verify previous session is completely deleted and session2 is now active
+  assert.equal(state.sessions.length, 1);
+  assert.equal(state.sessions[0].id, session2.id);
+  assert.equal(state.sessions[0].challenge.id, c2.id);
+  assert.equal(state.activeId, session2.id);
+  assert.equal(state.sessions.some((s) => s.id === session1.id), false);
+
+  // Verify schema validation
+  assert.doesNotThrow(() => stateSchema.parse(state));
+});
+
+test('delete unfinished session removes it from sessions and clears activeId', () => {
+  const state = initialState();
+  const c1 = state.challenges[0];
+
+  const session1 = createSession(c1, 1, 1000);
+  state.sessions.push(session1);
+  state.activeId = session1.id;
+
+  assert.equal(state.activeId, session1.id);
+
+  // Simulating deleteSession
+  state.sessions = state.sessions.filter((s) => s.id !== session1.id);
+  if (state.activeId === session1.id) {
+    state.activeId = null;
+  }
+
+  assert.equal(state.sessions.length, 0);
+  assert.equal(state.activeId, null);
+  assert.doesNotThrow(() => stateSchema.parse(state));
+});
