@@ -235,7 +235,7 @@ export function Reveal({
                   <div className="confirm-text">
                     <p>
                       <strong>Start over with this challenge?</strong> This will permanently delete your unfinished session for{' '}
-                      <strong>{active.challenge.title}</strong> and start 30:00 pitch on <strong>{c.title}</strong>.
+                      <strong>{active.challenge.title}</strong> and start 30:00 study on <strong>{c.title}</strong>.
                     </p>
                   </div>
                   <div className="confirm-actions">

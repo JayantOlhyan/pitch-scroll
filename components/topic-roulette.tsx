@@ -367,7 +367,7 @@ export function TopicRoulette({
         <div className="roulette-eyebrow">
           <span className="live-pulse" />
           <span className="mono">
-            {isDaily ? `DAILY CHALLENGE · ${dateKey()}` : '30 MINUTE · WHAT WILL YOU PITCH'}
+            {isDaily ? `DAILY CHALLENGE · ${dateKey()}` : '30 MINUTE · WHAT WILL YOU STUDY'}
           </span>
           <span className="hud-sep">·</span>
           <span className="mono pool-pill">
@@ -378,16 +378,16 @@ export function TopicRoulette({
 
         <h1 className="roulette-title">
           {revealed
-            ? 'WHAT YOU WILL PITCH'
+            ? 'WHAT YOU WILL STUDY'
             : isSpinning
-            ? 'SELECTING TOPIC…'
-            : 'WHAT WILL YOU PITCH?'}
+              ? 'SELECTING TOPIC…'
+              : 'WHAT WILL YOU STUDY?'}
         </h1>
 
         <p className="roulette-subtitle">
           {revealed
-            ? 'Your 30-minute deep-dive pitch challenge. Connect the dots and form your mental model.'
-            : '30 minutes to pitch, understand, and break down a real-world system.'}
+            ? 'Your 30-minute deep-dive study challenge. Connect the dots and form your mental model.'
+            : '30 minutes to study, understand, and break down a real-world system.'}
         </p>
       </div>
 
@@ -417,11 +417,11 @@ export function TopicRoulette({
                   style={
                     isSelected
                       ? {
-                          borderColor: style.border,
-                          backgroundColor: style.bg,
-                          color: style.text,
-                          boxShadow: `0 0 16px ${style.glow}`,
-                        }
+                        borderColor: style.border,
+                        backgroundColor: style.bg,
+                        color: style.text,
+                        boxShadow: `0 0 16px ${style.glow}`,
+                      }
                       : undefined
                   }
                 >
@@ -553,8 +553,8 @@ export function TopicRoulette({
                   {isSpinning
                     ? 'SCANNING CANDIDATES…'
                     : justLocked
-                    ? 'PITCH TOPIC LOCKED'
-                    : 'TOPIC TO PITCH'}
+                      ? 'STUDY TOPIC LOCKED'
+                      : 'TOPIC TO STUDY'}
                 </span>
               </div>
             </div>
@@ -596,9 +596,9 @@ export function TopicRoulette({
                       style={
                         isCentered
                           ? {
-                              borderColor: style.border,
-                              boxShadow: `0 14px 45px rgba(0, 0, 0, 0.9), 0 0 35px ${style.glow}, inset 0 1px 0 rgba(255, 255, 255, 0.2)`,
-                            }
+                            borderColor: style.border,
+                            boxShadow: `0 14px 45px rgba(0, 0, 0, 0.9), 0 0 35px ${style.glow}, inset 0 1px 0 rgba(255, 255, 255, 0.2)`,
+                          }
                           : undefined
                       }
                     >
@@ -687,7 +687,7 @@ export function TopicRoulette({
           </div>
 
           <div className="reveal-topic-hero">
-            <p className="reveal-tagline mono orange">WHAT YOU WILL PITCH</p>
+            <p className="reveal-tagline mono orange">WHAT YOU WILL STUDY</p>
             <h2 className="reveal-topic-title">{winner.title}</h2>
             <p className="reveal-description">{winner.description}</p>
           </div>
@@ -695,14 +695,14 @@ export function TopicRoulette({
           <div className="reveal-mission-box">
             <div className="mission-label mono">
               <Sparkles size={16} className="orange" />
-              <span>THE 30-MINUTE PITCH MISSION</span>
+              <span>THE 30-MINUTE STUDY MISSION</span>
             </div>
             <p className="mission-text">{winner.mission}</p>
           </div>
 
           <div className="reveal-specs-grid">
             <div className="spec-card">
-              <span className="spec-label mono">PITCH CLOCK</span>
+              <span className="spec-label mono">STUDY CLOCK</span>
               <strong className="spec-val orange">30:00</strong>
               <span className="spec-sub">Deep research & mental model</span>
             </div>
@@ -767,8 +767,8 @@ export function TopicRoulette({
                 <div className="active-session-confirm-box">
                   <div className="confirm-text">
                     <p>
-                      <strong>Start over with a new pitch?</strong> This will permanently delete your unfinished session and notes for{' '}
-                      <strong>{activeSession.challenge.title}</strong> and start a new 30:00 pitch on <strong>{winner.title}</strong>.
+                      <strong>Start over with a new study?</strong> This will permanently delete your unfinished session and notes for{' '}
+                      <strong>{activeSession.challenge.title}</strong> and start a new 30:00 study on <strong>{winner.title}</strong>.
                     </p>
                   </div>
                   <div className="confirm-actions">
@@ -822,7 +822,7 @@ export function TopicRoulette({
           ) : (
             <div className="reveal-cta-bar">
               <button className="button primary big start-30-btn" onClick={handleStartSession} type="button">
-                <span>START 30:00 PITCH</span>
+                <span>START 30:00 STUDY</span>
                 <ArrowRight size={22} />
               </button>
               {!isDaily && (
