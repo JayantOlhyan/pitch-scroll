@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Search, SlidersHorizontal, Plus, Shuffle, ArrowRight } from 'lucide-react';
+import { Search, SlidersHorizontal, Plus, Shuffle, ArrowRight, AlertTriangle, Trash2 } from 'lucide-react';
 import { useAppRouter } from '@/hooks/use-location';
 import { useApp } from '@/hooks/use-app';
 import { Challenge, challengeTypes, difficulties } from '@/types';
@@ -143,9 +143,10 @@ export function Reveal({
   challenge: Challenge;
   daily?: boolean;
 }) {
-  const { state, start } = useApp();
+  const { state, start, deleteSession, discardAndStart } = useApp();
   const router = useAppRouter();
   const active = state.sessions.find((s) => s.id === state.activeId && s.phase !== 'complete');
+  const [confirmAction, setConfirmAction] = useState<'discard-and-start' | 'delete-only' | null>(null);
   const catStyle = getCategoryStyle(c.category);
 
   return (
@@ -190,16 +191,106 @@ export function Reveal({
           </div>
 
           {active ? (
-            <div className="notice">
-              <p>
-                You have an unfinished {active.challenge.title} session. Finish it before starting another timed challenge.
-              </p>
-              <Link
-                className="button primary"
-                href={`/${active.phase === 'research' ? 'research' : active.phase === 'pitch' ? 'pitch' : 'result'}/${active.id}`}
-              >
-                Resume session
-              </Link>
+            <div className="active-session-warning notice">
+              <div className="active-session-header">
+                <AlertTriangle size={20} className="warning-icon orange" />
+                <p>
+                  <strong>Unfinished Session in Progress:</strong> You have an active{' '}
+                  <span className="active-session-title">{active.challenge.title}</span> challenge.
+                  Resume it, or start over fresh with a new session.
+                </p>
+              </div>
+
+              {confirmAction === null && (
+                <div className="active-session-actions">
+                  <Link
+                    className="button primary active-session-resume-btn"
+                    href={`/${active.phase === 'research' ? 'research' : active.phase === 'pitch' ? 'pitch' : 'result'}/${active.id}`}
+                  >
+                    <ArrowRight size={16} />
+                    <span>Resume session</span>
+                  </Link>
+
+                  <button
+                    className="button danger-outline active-session-discard-start-btn"
+                    onClick={() => setConfirmAction('discard-and-start')}
+                    type="button"
+                  >
+                    <Trash2 size={16} />
+                    <span>Start Over & Delete Previous</span>
+                  </button>
+
+                  <button
+                    className="button quiet text-danger active-session-delete-only-btn"
+                    onClick={() => setConfirmAction('delete-only')}
+                    type="button"
+                  >
+                    <span>Delete Previous Session</span>
+                  </button>
+                </div>
+              )}
+
+              {confirmAction === 'discard-and-start' && (
+                <div className="active-session-confirm-box">
+                  <div className="confirm-text">
+                    <p>
+                      <strong>Start over with this challenge?</strong> This will permanently delete your unfinished session for{' '}
+                      <strong>{active.challenge.title}</strong> and start 30:00 study on <strong>{c.title}</strong>.
+                    </p>
+                  </div>
+                  <div className="confirm-actions">
+                    <button
+                      className="button danger-solid"
+                      onClick={() => {
+                        const newId = discardAndStart(active.id, c);
+                        router.push(`/research/${newId}`);
+                      }}
+                      type="button"
+                    >
+                      <Trash2 size={15} />
+                      <span>Yes, Delete & Start This (30:00)</span>
+                    </button>
+                    <button
+                      className="button quiet"
+                      onClick={() => setConfirmAction(null)}
+                      type="button"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {confirmAction === 'delete-only' && (
+                <div className="active-session-confirm-box">
+                  <div className="confirm-text">
+                    <p>
+                      <strong>Delete unfinished session?</strong> This will permanently delete{' '}
+                      <strong>{active.challenge.title}</strong> from this device so you can start or explore freely.
+                    </p>
+                  </div>
+                  <div className="confirm-actions">
+                    <button
+                      className="button danger-solid"
+                      onClick={() => {
+                        deleteSession(active.id);
+                        setConfirmAction(null);
+                      }}
+                      type="button"
+                    >
+                      <Trash2 size={15} />
+                      <span>Yes, Delete Session</span>
+                    </button>
+                    <button
+                      className="button quiet"
+                      onClick={() => setConfirmAction(null)}
+                      type="button"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="reveal-actions-row">
