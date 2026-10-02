@@ -23,29 +23,29 @@ import { Badge, Modal, SourceList, Timer, number } from './ui';
 import { getCategoryStyle } from './topic-roulette';
 
 const prompts = [
-  'What problem does it solve? Who experiences it? Why does it matter?',
-  'How does someone use it? What is the core workflow?',
-  'What makes it work? Explain the important technical choices.',
-  'Sketch the components, data flow, and dependencies in words.',
-  'Who pays, what do they pay for, and what does it cost to deliver?',
-  'What alternatives exist, and how do they differ?',
-  'What is difficult to replicate? What compounds over time?',
-  'What can fail? Which tradeoffs and limitations matter?',
-  'What surprised you? What is your own interpretation?',
-  'Shape your own explanation: problem, solution, technology, business, verdict.',
+  'What real-world pain does it eliminate? Who feels the acute pain, and what is the cost of not solving it?',
+  'What is the end-user workflow from start to finish? Where does the core value click into place?',
+  'What makes it work under the hood? Identify the non-obvious engineering and technical decisions.',
+  'Map the high-level architecture: major services, data flow, state management, and critical dependencies.',
+  'Who writes the check, what metrics drive pricing, and what does it cost operationally to deliver?',
+  'What existing solutions do users compare it against, and where does each approach fail or shine?',
+  'What is defensible? What network effect, proprietary data, switching friction, or scale advantage compounds?',
+  'Where does the abstraction leak or break? What are the architectural bottlenecks and failure modes?',
+  'What counterintuitive insight did you discover? Form your own thesis beyond company marketing.',
+  'Synthesize your 5-minute story: Problem → Architecture → Business reality → Verdict.',
 ];
 
 const checkLabels = [
-  'I understand the problem',
-  'I understand the product',
-  'I understand the technology',
-  'I understand the architecture',
-  'I understand the business model',
-  'I know the competitors',
-  'I understand the moat',
-  'I understand the weaknesses',
-  'I have formed my own opinion',
-  'I can explain it in 5 minutes',
+  'I understand the acute user problem',
+  'I understand the product workflow',
+  'I understand the core technology',
+  'I can sketch the system architecture',
+  'I understand unit economics & business model',
+  'I know the competitive landscape',
+  'I can identify the compound moat',
+  'I know the architectural tradeoffs & flaws',
+  'I have formulated an independent opinion',
+  'I can pitch this clearly in 5 minutes',
 ];
 
 export function Workspace({ session: s }: { session: Session }) {
