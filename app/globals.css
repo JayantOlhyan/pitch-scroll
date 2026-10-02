@@ -2163,6 +2163,171 @@ main {
   margin-top: 6px;
 }
 
+/* Active Session Warning & Management Controls */
+.active-session-warning.notice {
+  background: linear-gradient(135deg, rgba(38, 25, 12, 0.95), rgba(22, 14, 8, 0.95));
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  border-radius: 12px;
+  padding: 22px 24px;
+  margin-bottom: 34px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(245, 158, 11, 0.1);
+  color: #fde68a;
+}
+
+.active-session-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.active-session-header .warning-icon {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: #fbbf24;
+}
+
+.active-session-header p {
+  margin: 0;
+  color: #fde68a;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.active-session-header p strong {
+  color: #fbbf24;
+}
+
+.active-session-title {
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: rgba(251, 191, 36, 0.55);
+  text-underline-offset: 3px;
+}
+
+.active-session-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.active-session-actions .button {
+  margin-top: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.active-session-resume-btn {
+  background: linear-gradient(135deg, #ff642c, #e04a14);
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 18px rgba(255, 100, 44, 0.35);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.active-session-resume-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 25px rgba(255, 100, 44, 0.6);
+  color: #ffffff;
+}
+
+.active-session-discard-start-btn {
+  background: rgba(220, 38, 38, 0.14);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+  padding: 12px 20px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.active-session-discard-start-btn:hover {
+  background: rgba(220, 38, 38, 0.28);
+  border-color: #ef4444;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.35);
+}
+
+.active-session-delete-only-btn {
+  color: #94a3b8;
+  font-size: 13px;
+  padding: 8px 12px;
+  transition: color 0.15s ease;
+}
+
+.active-session-delete-only-btn:hover {
+  color: #ef4444;
+}
+
+.active-session-confirm-box {
+  background: rgba(38, 12, 12, 0.95);
+  border: 1px solid rgba(239, 68, 68, 0.6);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+.active-session-confirm-box .confirm-text p {
+  margin: 0;
+  color: #fecaca;
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+.active-session-confirm-box .confirm-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.button.danger-solid {
+  background: #dc2626;
+  border: 1px solid #ef4444;
+  color: #ffffff;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.18s ease;
+}
+
+.button.danger-solid:hover {
+  background: #b91c1c;
+  border-color: #f87171;
+  box-shadow: 0 6px 22px rgba(220, 38, 38, 0.6);
+  color: #ffffff;
+}
+
+.unfinished-history-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.unfinished-history-link {
+  display: grid;
+  grid-template-columns: 80px 1.2fr 1fr 100px;
+  gap: 20px;
+  align-items: center;
+  flex: 1;
+  color: inherit;
+  text-decoration: none;
+}
+
 .reveal-cta-bar {
   display: flex;
   align-items: center;
