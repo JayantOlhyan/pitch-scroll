@@ -2918,6 +2918,38 @@ kbd {
   background: #141c19;
 }
 
+.shortcuts-legend-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.shortcut-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 10px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+}
+
+.shortcut-legend-row kbd {
+  min-width: 68px;
+  text-align: center;
+  font-size: 11px;
+  padding: 4px 8px;
+  color: var(--orange);
+  background: #111815;
+  border-color: #2b3934;
+}
+
+.shortcut-legend-row span {
+  font-size: 13px;
+  color: #cdd6d2;
+}
+
 /* Pitch Grid & Beats */
 .pitch-grid {
   grid-template-columns: 1fr 1fr;

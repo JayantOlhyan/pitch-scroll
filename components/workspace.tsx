@@ -15,6 +15,7 @@ import {
   Shrink,
   Film,
   RotateCcw,
+  HelpCircle,
 } from 'lucide-react';
 import { useApp } from '@/hooks/use-app';
 import { Session, sections } from '@/types';
@@ -55,6 +56,7 @@ export function Workspace({ session: s }: { session: Session }) {
   const [panel, setPanel] = useState('notes');
   const [end, setEnd] = useState(false);
   const [resetModal, setResetModal] = useState(false);
+  const [shortcutModal, setShortcutModal] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
 
   const p = state.preferences;
@@ -111,8 +113,13 @@ export function Workspace({ session: s }: { session: Session }) {
         e.preventDefault();
         toggleFullscreen();
       }
+      if (e.key === '?' || (e.key === '/' && e.shiftKey)) {
+        e.preventDefault();
+        setShortcutModal((prev) => !prev);
+      }
       if (e.key === 'Escape') {
         setPrefs({ cinematic: false, recording: 'off' });
+        setShortcutModal(false);
       }
     };
     window.addEventListener('keydown', handler);
@@ -192,6 +199,17 @@ export function Workspace({ session: s }: { session: Session }) {
           >
             {s.pausedAt ? <Play size={16} /> : <Pause size={16} />}
             <span>{s.pausedAt ? 'Resume' : 'Pause'}</span>
+          </button>
+
+          {/* Keyboard Shortcuts Button */}
+          <button
+            className="quiet toolbar-btn"
+            onClick={() => setShortcutModal(true)}
+            aria-label="Keyboard shortcuts legend"
+            title="Keyboard shortcuts legend (Hotkey: ?)"
+          >
+            <HelpCircle size={15} />
+            <span>Shortcuts</span>
           </button>
 
           {/* Reset Timer Button */}
@@ -546,6 +564,34 @@ export function Workspace({ session: s }: { session: Session }) {
               }}
             >
               {pitch ? 'Reset & Start 05:00' : 'Reset & Start 30:00'}
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {/* Keyboard Shortcuts Legend Modal */}
+      {shortcutModal && (
+        <Modal title="Keyboard Shortcuts Legend" onClose={() => setShortcutModal(false)}>
+          <div className="shortcuts-legend-list">
+            {[
+              ['Space', 'Pause or resume session countdown (marks attempt as practice)'],
+              ['R', 'Reset timer back to 30:00 (Research) or 05:00 (Pitch)'],
+              ['F', 'Toggle distraction-free cinematic mode'],
+              ['Shift + F', 'Toggle native fullscreen browser window'],
+              ['M', 'Mute or unmute procedural Web Audio sound cues'],
+              ['N', 'Draw a new topic challenge from library'],
+              ['?', 'Toggle this keyboard shortcuts legend modal'],
+              ['Escape', 'Exit cinematic / recording modes or dismiss dialogs'],
+            ].map(([key, desc]) => (
+              <div key={key} className="shortcut-legend-row">
+                <kbd className="mono">{key}</kbd>
+                <span>{desc}</span>
+              </div>
+            ))}
+          </div>
+          <div className="actions modal-actions" style={{ marginTop: 20 }}>
+            <button className="button primary" type="button" onClick={() => setShortcutModal(false)}>
+              Got it
             </button>
           </div>
         </Modal>
