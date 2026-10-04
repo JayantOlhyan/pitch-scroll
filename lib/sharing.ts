@@ -26,6 +26,9 @@ export async function renderResult(s: Session): Promise<Blob> {
     glow: 'rgba(255,100,44,0.3)',
   };
 
+  const fontSans = "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+  const fontMono = "'JetBrains Mono', 'IBM Plex Mono', 'SFMono-Regular', Menlo, Monaco, Consolas, monospace";
+
   // 1. Deep charcoal/dark background
   ctx.fillStyle = '#0a0d0d';
   ctx.fillRect(0, 0, 1080, 1350);
@@ -56,13 +59,13 @@ export async function renderResult(s: Session): Promise<Blob> {
   ctx.fillStyle = '#ff642c';
   ctx.fillRect(70, 70, 8, 48);
 
-  ctx.font = 'bold 36px Arial, sans-serif';
+  ctx.font = `bold 36px ${fontSans}`;
   ctx.fillStyle = '#ff642c';
   ctx.fillText('30', 92, 106);
   ctx.fillStyle = '#ffffff';
   ctx.fillText(' MINUTE', 134, 106);
 
-  ctx.font = 'bold 18px monospace';
+  ctx.font = `bold 18px ${fontMono}`;
   ctx.fillStyle = '#9ca7a4';
   ctx.fillText(
     `TEST #${String(s.number).padStart(3, '0')} · ${s.practice ? 'PRACTICE' : 'OFFICIAL RUN'}`,
@@ -79,7 +82,7 @@ export async function renderResult(s: Session): Promise<Blob> {
 
   // 3. Category & Difficulty Badges
   let curY = 195;
-  ctx.font = 'bold 16px monospace';
+  ctx.font = `bold 16px ${fontMono}`;
   ctx.fillStyle = catStyle.text;
   ctx.fillText(`${s.challenge.category.toUpperCase()} / ${s.challenge.type.toUpperCase()}`, 70, curY);
 
@@ -110,7 +113,7 @@ export async function renderResult(s: Session): Promise<Blob> {
   };
 
   ctx.fillStyle = '#ffffff';
-  ctx.font = '900 76px Arial, sans-serif';
+  ctx.font = `900 76px ${fontSans}`;
   curY = wrap(s.challenge.title, curY, 940, 84, 2);
   curY += 20;
 
@@ -128,18 +131,18 @@ export async function renderResult(s: Session): Promise<Blob> {
 
   metrics.forEach((m, idx) => {
     const x = 95 + idx * 320;
-    ctx.font = 'bold 15px monospace';
+    ctx.font = `bold 15px ${fontMono}`;
     ctx.fillStyle = '#8b9794';
     ctx.fillText(m.label, x, curY + 45);
 
-    ctx.font = 'bold 56px Arial, sans-serif';
+    ctx.font = `bold 56px ${fontSans}`;
     ctx.fillStyle = m.color;
     ctx.fillText(m.val, x, curY + 108);
   });
   curY += 180;
 
   // 6. Detailed Score Breakdown Bars
-  ctx.font = 'bold 16px monospace';
+  ctx.font = `bold 16px ${fontMono}`;
   ctx.fillStyle = '#ff642c';
   ctx.fillText('SCORE BREAKDOWN', 70, curY);
   curY += 25;
@@ -152,7 +155,7 @@ export async function renderResult(s: Session): Promise<Blob> {
   ];
 
   scoreItems.forEach((item) => {
-    ctx.font = '18px Arial, sans-serif';
+    ctx.font = `18px ${fontSans}`;
     ctx.fillStyle = '#d1dbd8';
     ctx.fillText(item.name, 70, curY + 22);
 
@@ -166,7 +169,7 @@ export async function renderResult(s: Session): Promise<Blob> {
     ctx.fillStyle = item.val >= 8 ? '#ff642c' : item.val >= 6 ? '#f59e0b' : '#38bdf8';
     ctx.fillRect(barX, curY + 8, (item.val / 10) * barW, 14);
 
-    ctx.font = 'bold 18px monospace';
+    ctx.font = `bold 18px ${fontMono}`;
     ctx.fillStyle = '#ffffff';
     ctx.fillText(`${item.val}/10`, 940, curY + 22);
 
@@ -180,17 +183,17 @@ export async function renderResult(s: Session): Promise<Blob> {
   ctx.strokeStyle = '#2c3634';
   ctx.strokeRect(70, curY, 940, 240);
 
-  ctx.font = 'bold 15px monospace';
+  ctx.font = `bold 15px ${fontMono}`;
   ctx.fillStyle = '#ff642c';
   ctx.fillText('THE KEY TAKEAWAY', 100, curY + 45);
 
-  ctx.font = '26px Arial, sans-serif';
+  ctx.font = `26px ${fontSans}`;
   ctx.fillStyle = '#efefea';
   const takeaway = s.reflections[3] || 'A new architectural perspective, earned under 30 minutes of pressure.';
   wrap(`“${takeaway}”`, curY + 95, 870, 38, 3);
 
   // 8. Footer Signoff
-  ctx.font = 'bold 16px monospace';
+  ctx.font = `bold 16px ${fontMono}`;
   ctx.fillStyle = '#8b9794';
   ctx.fillText('30 MINUTES TO UNDERSTAND. 5 MINUTES TO PITCH.', 70, 1270);
   ctx.fillText('#30MINUTE', 910, 1270);
