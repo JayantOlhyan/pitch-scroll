@@ -53,14 +53,31 @@ export function Assessment({ session: s }: { session: Session }) {
           <div className="panel">
             <h2>Assess your understanding</h2>
             <p className="muted">1 = unclear · 5 = working model · 10 = can teach it</p>
+            <div className="score-rubric-legend" aria-label="Score rubric guide">
+              <span className="rubric-badge level-low">1–3 Surface</span>
+              <span className="rubric-badge level-mid">4–6 Working Model</span>
+              <span className="rubric-badge level-high">7–8 Clear Pitch</span>
+              <span className="rubric-badge level-max">9–10 Teach It</span>
+            </div>
             {scoreLabels.map((label, i) => (
               <label className="score-input" key={label}>
                 <span>
                   {label}
-                  <strong>
-                    {s.scores[i]}
-                    <small>/10</small>
-                  </strong>
+                  <span className="score-value-meta">
+                    <span className="score-level-text mono">
+                      {s.scores[i] >= 9
+                        ? 'Mastery'
+                        : s.scores[i] >= 7
+                        ? 'Strong'
+                        : s.scores[i] >= 4
+                        ? 'Working'
+                        : 'Surface'}
+                    </span>
+                    <strong>
+                      {s.scores[i]}
+                      <small>/10</small>
+                    </strong>
+                  </span>
                 </span>
                 <input
                   type="range"

@@ -2681,6 +2681,59 @@ main {
   gap: 12px;
 }
 
+.score-rubric-legend {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 14px 0 22px;
+}
+
+.rubric-badge {
+  font-size: 11px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  text-align: center;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--muted);
+}
+
+.rubric-badge.level-low {
+  border-color: rgba(248, 113, 113, 0.3);
+  color: #fca5a5;
+}
+
+.rubric-badge.level-mid {
+  border-color: rgba(251, 146, 60, 0.3);
+  color: #fdba74;
+}
+
+.rubric-badge.level-high {
+  border-color: rgba(34, 211, 238, 0.3);
+  color: #67e8f9;
+}
+
+.rubric-badge.level-max {
+  border-color: rgba(52, 211, 153, 0.3);
+  color: #6ee7b7;
+}
+
+.score-value-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.score-level-text {
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
 .timer {
   font-size: clamp(4.2rem, 7vw, 6.8rem);
   line-height: 1.15;
