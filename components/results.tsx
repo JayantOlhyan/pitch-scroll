@@ -2,16 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Check, Copy, Download, Shuffle } from 'lucide-react';
+import { Check, Copy, Download, Shuffle, RotateCcw } from 'lucide-react';
 import { useApp } from '@/hooks/use-app';
 import { Session, scoreLabels, reflectionLabels } from '@/types';
-import { formatTime, score } from '@/lib/engine';
+import { formatTime, score, restartPitch } from '@/lib/engine';
 import { contentAssets, renderResult, shareToken } from '@/lib/sharing';
 import { Badge, number, SourceList, Modal } from './ui';
 import { getCategoryStyle } from './topic-roulette';
 
 export function Assessment({ session: s }: { session: Session }) {
   const { editSession, play } = useApp();
+  const [retakeModal, setRetakeModal] = useState(false);
 
   return (
     <div className="page assessment">
@@ -21,9 +22,20 @@ export function Assessment({ session: s }: { session: Session }) {
           <h1>What actually stuck?</h1>
           <p>{s.challenge.title} · An honest score is more useful than a perfect one.</p>
         </div>
-        <span className="completion-mark">
-          <Check size={28} />
-        </span>
+        <div className="row assessment-top-actions" style={{ gap: '12px', alignItems: 'center' }}>
+          <button
+            type="button"
+            className="button quiet small"
+            onClick={() => setRetakeModal(true)}
+            title="Missed the pitch window? Restart your 5-minute pitch countdown"
+          >
+            <RotateCcw size={14} />
+            <span>Retake 05:00 pitch</span>
+          </button>
+          <span className="completion-mark">
+            <Check size={28} />
+          </span>
+        </div>
       </div>
 
       <form
@@ -96,6 +108,45 @@ export function Assessment({ session: s }: { session: Session }) {
           </button>
         </div>
       </form>
+
+      {/* Retake Pitch Confirmation Modal */}
+      {retakeModal && (
+        <Modal
+          title="Restart your 5-minute pitch?"
+          onClose={() => setRetakeModal(false)}
+        >
+          <p>
+            Missed the pitch window or encountered an issue during recording? You can return to the pitch workspace with a full 5-minute countdown. Your notes and research are preserved.
+          </p>
+          <div className="actions modal-actions">
+            <button className="button" type="button" onClick={() => setRetakeModal(false)}>
+              Stay on Assessment
+            </button>
+            <button
+              className="button"
+              type="button"
+              onClick={() => {
+                editSession(s.id, (x) => restartPitch(x, Date.now(), true));
+                play('click');
+                setRetakeModal(false);
+              }}
+            >
+              Restart & Pause
+            </button>
+            <button
+              className="button primary"
+              type="button"
+              onClick={() => {
+                editSession(s.id, (x) => restartPitch(x, Date.now(), false));
+                play('start');
+                setRetakeModal(false);
+              }}
+            >
+              Start 05:00 Pitch
+            </button>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

@@ -22,6 +22,16 @@ export function pause(s:Session,now=Date.now()):Session{
  if(!s.pausedAt)return {...s,pausedAt:now,practice:true};
  const delay=now-s.pausedAt; return {...s,pausedAt:null,endTime:s.endTime+delay,phaseStartedAt:s.phaseStartedAt+delay,pausedTotal:s.pausedTotal+delay};
 }
+export function resetTimer(s:Session,now=Date.now(),keepPaused?:boolean):Session{
+ if(s.phase!=='research'&&s.phase!=='pitch'&&s.phase!=='assessment')return s;
+ if(s.phase==='assessment')return restartPitch(s,now,keepPaused??false);
+ const duration=s.phase==='research'?RESEARCH_MS:PITCH_MS;
+ const isPaused=keepPaused!==undefined?keepPaused:(s.pausedAt!==null);
+ return {...s,phaseStartedAt:now,endTime:now+duration,pausedAt:isPaused?now:null,pitchSeconds:s.phase==='pitch'?0:s.pitchSeconds,researchSeconds:s.phase==='research'?0:s.researchSeconds,practice:true};
+}
+export function restartPitch(s:Session,now=Date.now(),keepPaused=false):Session{
+ return {...s,phase:'pitch',phaseStartedAt:now,endTime:now+PITCH_MS,pausedAt:keepPaused?now:null,pitchSeconds:0,practice:true};
+}
 export function choose(pool:Challenge[],seen:string[],sessions:Session[],random=Math.random){
  const unseen=pool.filter(c=>!seen.includes(c.id)&&!sessions.some(s=>s.challenge.id===c.id));
  const candidates=unseen.length?unseen:pool.filter(c=>!seen.slice(-Math.min(5,Math.max(0,pool.length-1))).includes(c.id));

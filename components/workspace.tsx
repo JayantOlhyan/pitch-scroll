@@ -14,10 +14,11 @@ import {
   Expand,
   Shrink,
   Film,
+  RotateCcw,
 } from 'lucide-react';
 import { useApp } from '@/hooks/use-app';
 import { Session, sections } from '@/types';
-import { advance, pause, remaining } from '@/lib/engine';
+import { advance, pause, remaining, resetTimer } from '@/lib/engine';
 import { Badge, Modal, SourceList, Timer, number } from './ui';
 import { getCategoryStyle } from './topic-roulette';
 
@@ -53,6 +54,7 @@ export function Workspace({ session: s }: { session: Session }) {
   const [tab, setTab] = useState('Problem');
   const [panel, setPanel] = useState('notes');
   const [end, setEnd] = useState(false);
+  const [resetModal, setResetModal] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
 
   const p = state.preferences;
@@ -96,6 +98,10 @@ export function Workspace({ session: s }: { session: Session }) {
       if (e.code === 'Space') {
         e.preventDefault();
         editSession(s.id, (x) => pause(advance(x)));
+      }
+      if (e.key.toLowerCase() === 'r' && !e.shiftKey) {
+        e.preventDefault();
+        setResetModal(true);
       }
       if (e.key.toLowerCase() === 'f' && !e.shiftKey) {
         e.preventDefault();
@@ -188,6 +194,16 @@ export function Workspace({ session: s }: { session: Session }) {
             <span>{s.pausedAt ? 'Resume' : 'Pause'}</span>
           </button>
 
+          {/* Reset Timer Button */}
+          <button
+            className="quiet toolbar-btn"
+            onClick={() => setResetModal(true)}
+            title={pitch ? 'Reset 5-minute pitch timer to 05:00' : 'Reset research timer to 30:00'}
+          >
+            <RotateCcw size={15} />
+            <span>Reset timer</span>
+          </button>
+
           {/* End Phase Button */}
           <button className="button small danger" onClick={() => setEnd(true)}>
             {pitch ? 'Finish pitch' : 'End research'}
@@ -227,15 +243,32 @@ export function Workspace({ session: s }: { session: Session }) {
           {!pitch && <p className="workspace-description">{s.challenge.description}</p>}
         </div>
 
-        <Timer session={s} large={pitch || p.cinematic || p.recording !== 'off'} />
+        <Timer
+          session={s}
+          large={pitch || p.cinematic || p.recording !== 'off'}
+          onReset={() => setResetModal(true)}
+        />
       </div>
 
       {/* Pitch Announcement Banner */}
       {pitch && (
         <div className="pitch-announcement-banner">
-          <span className="mono orange">RESEARCH COMPLETE</span>
-          <h2>YOUR 5 MINUTE PITCH STARTS NOW.</h2>
-          <p>Deliver your explanation cleanly. Use the 7 beats below as your mental map.</p>
+          <div className="pitch-announcement-header">
+            <div>
+              <span className="mono orange">RESEARCH COMPLETE</span>
+              <h2>YOUR 5 MINUTE PITCH STARTS NOW.</h2>
+              <p>Deliver your explanation cleanly. Use the 7 beats below as your mental map.</p>
+            </div>
+            <button
+              type="button"
+              className="button quiet small pitch-reset-btn"
+              onClick={() => setResetModal(true)}
+              title="Reset 5-minute pitch countdown back to 05:00"
+            >
+              <RotateCcw size={14} />
+              <span>Reset 05:00 timer</span>
+            </button>
+          </div>
         </div>
       )}
 
@@ -443,7 +476,7 @@ export function Workspace({ session: s }: { session: Session }) {
           {pitch ? '05' : '30'} MINUTE / {pitch ? 'PITCH' : 'RESEARCH'} RUN
         </span>
         <span className="mono muted shortcuts-help">
-          <kbd>Shift+F</kbd> full screen · <kbd>F</kbd> cinematic · <kbd>Space</kbd> pause · <kbd>M</kbd> sound · <kbd>Esc</kbd> exit
+          <kbd>Shift+F</kbd> full screen · <kbd>F</kbd> cinematic · <kbd>Space</kbd> pause · <kbd>R</kbd> reset timer · <kbd>M</kbd> sound · <kbd>Esc</kbd> exit
         </span>
         <span className="mono">{checked}/10 questions understood</span>
       </div>
@@ -472,6 +505,47 @@ export function Workspace({ session: s }: { session: Session }) {
               }}
             >
               {pitch ? 'Finish and Score' : 'Start 05:00 Pitch'}
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {/* Reset Timer Confirmation Modal */}
+      {resetModal && (
+        <Modal
+          title={pitch ? 'Reset 5-minute pitch timer?' : 'Reset 30-minute research timer?'}
+          onClose={() => setResetModal(false)}
+        >
+          <p>
+            {pitch
+              ? 'Missed the start or need to fix camera/audio? You can reset the countdown back to 05:00 to start fresh. This attempt will be flagged as practice.'
+              : 'This will reset your research countdown back to 30:00. This attempt will be flagged as practice.'}
+          </p>
+          <div className="actions modal-actions">
+            <button className="button" type="button" onClick={() => setResetModal(false)}>
+              Keep Going
+            </button>
+            <button
+              className="button"
+              type="button"
+              onClick={() => {
+                editSession(s.id, (x) => resetTimer(x, Date.now(), true));
+                play('click');
+                setResetModal(false);
+              }}
+            >
+              Reset & Pause
+            </button>
+            <button
+              className="button primary"
+              type="button"
+              onClick={() => {
+                editSession(s.id, (x) => resetTimer(x, Date.now(), false));
+                play('start');
+                setResetModal(false);
+              }}
+            >
+              {pitch ? 'Reset & Start 05:00' : 'Reset & Start 30:00'}
             </button>
           </div>
         </Modal>

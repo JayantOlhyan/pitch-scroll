@@ -27,6 +27,7 @@ A personal technology-learning and content-creation platform. The creator receiv
 - **Procedural Sound Engine:** Minimal, cinematic Web Audio API sound cues for phase starts, 10m/5m/1m/30s warnings, phase transitions, and completions.
 - **Keyboard Shortcuts:**
   - <kbd>Space</kbd>: Pause / resume session (marks attempt as practice)
+  - <kbd>R</kbd>: Reset timer back to 05:00 pitch or 30:00 research
   - <kbd>M</kbd>: Mute / unmute procedural sound
   - <kbd>F</kbd>: Toggle Cinematic mode
   - <kbd>N</kbd>: Draw new challenge

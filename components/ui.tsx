@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowUpRight, Clock3, Command, Volume2, VolumeX, X, Zap, Cpu, Server, Terminal, Shield, AlertTriangle, Layers, Building2, Code2 } from 'lucide-react';
+import { ArrowUpRight, Clock3, Command, Volume2, VolumeX, X, Zap, Cpu, Server, Terminal, Shield, AlertTriangle, Layers, Building2, Code2, RotateCcw } from 'lucide-react';
 import { useApp } from '@/hooks/use-app';
 import { Challenge, Session } from '@/types';
 import { formatTime, remaining, statusFor } from '@/lib/engine';
@@ -194,9 +194,11 @@ export function SourceList({ challenge }: { challenge: Challenge }) {
 export function Timer({
   session,
   large = false,
+  onReset,
 }: {
   session: Session;
   large?: boolean;
+  onReset?: () => void;
 }) {
   const { now } = useApp();
   const seconds = remaining(session, now);
@@ -230,6 +232,17 @@ export function Timer({
             <>
               <i className={`live-dot ${timerStage === 'critical' ? 'critical-dot' : ''}`} /> In progress
             </>
+          )}
+          {onReset && (
+            <button
+              type="button"
+              className="timer-reset-btn"
+              onClick={onReset}
+              title={session.phase === 'pitch' ? 'Reset pitch timer to 05:00' : 'Reset timer'}
+            >
+              <RotateCcw size={10} />
+              <span>Reset</span>
+            </button>
           )}
         </span>
       </div>
