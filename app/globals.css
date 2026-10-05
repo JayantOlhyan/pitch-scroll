@@ -1286,9 +1286,17 @@ main {
   align-items: center;
   justify-content: space-between;
   gap: 28px;
+  flex-wrap: wrap;
 }
 
-.site-footer > .logo .logo-mark {
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.site-footer > .logo .logo-mark,
+.footer-brand > .logo .logo-mark {
   display: none;
 }
 
@@ -1296,11 +1304,24 @@ main {
   font-size: 11px;
 }
 
-.site-footer > div {
+.site-footer > div,
+.footer-links {
   display: flex;
   gap: 22px;
   align-items: center;
   font-size: 12px;
+}
+
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  transition: color 0.15s;
+}
+
+.github-link:hover {
+  color: var(--orange);
 }
 
 .site-footer .volume {
