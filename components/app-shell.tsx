@@ -302,22 +302,44 @@ export function About() {
           The platform gives you a timer, a structure, and starting points. The understanding has to come from you.
         </p>
 
+        <h3>The Feynman Principle Under Pressure</h3>
+        <p>
+          True technical understanding isn’t reciting documentation; it’s being able to explain the core mechanics simply
+          to an intelligent peer without hiding behind buzzwords. When forced to explain a complex topic within a 5-minute
+          window, you immediately discover the weak links in your mental model.
+        </p>
+
         <h3>Made to be used. Made to be filmed.</h3>
         <p>
-          Cinematic and recording modes keep the clock clear on camera, in 16:9 landscape or 9:16 vertical. Procedural sound
-          marks the phases. Your result becomes a scorecard, and your takeaway becomes the seed of your next post.
+          Cinematic and recording modes keep the clock clear and prominent on camera:
         </p>
+        <ul className="about-tips-list">
+          <li><strong>16:9 Desktop (YouTube):</strong> Position your webcam in the corner; the workspace keeps notes and the ticking clock visible without distracting clutter.</li>
+          <li><strong>9:16 Vertical (Reels / Shorts):</strong> Place your phone in front of you while filming your face, or record screen-capture video with big readable numbers.</li>
+          <li><strong>Procedural Audio:</strong> Web Audio chimes notify you at 10m, 5m, 1m, and 30s remaining without requiring external timer apps.</li>
+        </ul>
 
-        <h3>Your work stays with you.</h3>
+        <h3>Open Source & Local-First Privacy</h3>
         <p>
-          No account is required for the app itself. Notes and sessions are stored in this browser. Download a backup from
-          Data management to move them between devices. Research websites need an internet connection; the local challenge
-          workflow does not need an external AI service.
+          30 MINUTE is completely open-sourced and local-first. No accounts, no paywalls, no tracking cookies, and no telemetry.
+          Every note, session snapshot, checklist, and self-score is saved directly in your browser's local storage.
+          You can export your complete history as JSON at any time or transfer it between machines.
         </p>
 
-        <Link className="button primary" href="/challenge">
-          Take the challenge
-        </Link>
+        <div className="about-actions" style={{ display: 'flex', gap: '14px', marginTop: '24px', flexWrap: 'wrap' }}>
+          <Link className="button primary" href="/challenge">
+            Take the challenge
+          </Link>
+          <a
+            className="button"
+            href="https://github.com/JayantOlhyan/pitch-scroll"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <GithubIcon />
+            <span>Contribute on GitHub</span>
+          </a>
+        </div>
       </div>
     </div>
   );

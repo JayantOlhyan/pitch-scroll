@@ -1339,6 +1339,25 @@ main {
   padding: 56px;
 }
 
+.about-copy {
+  max-width: 720px;
+}
+
+.about-tips-list {
+  padding-left: 20px;
+  margin: 14px 0 24px;
+  color: var(--muted);
+}
+
+.about-tips-list li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.about-tips-list strong {
+  color: var(--text);
+}
+
 .page-title {
   display: flex;
   justify-content: space-between;
