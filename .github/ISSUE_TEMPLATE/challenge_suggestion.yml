@@ -1,0 +1,47 @@
+name: 💡 Challenge Suggestion
+description: Suggest a new technology, company, architecture, or case study
+labels: ['challenge-topic']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Suggest an unfamiliar topic or deep technical rabbit hole for the 30 MINUTE challenge library!
+  - type: input
+    id: topic
+    attributes:
+      label: Topic Name
+      placeholder: e.g. SQLite VFS, Bun Runtime, ClickHouse, WireGuard
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - AI
+        - Developer Tools
+        - Infrastructure
+        - Open Source
+        - Consumer Tech
+        - Indian Tech
+        - Engineering Systems
+        - Cybersecurity
+        - Failure Cases
+        - Business Models
+    validations:
+      required: true
+  - type: textarea
+    id: mission
+    attributes:
+      label: Research Mission
+      description: What specific mystery or core mechanic should a creator understand in 30 minutes?
+      placeholder: e.g. How does SQLite implement ACID transactions without a background daemon process?
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Starting Primary Sources
+      description: Links to technical documentation, engineering blogs, or source code.
+    validations:
+      required: true
