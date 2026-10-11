@@ -1,7 +1,28 @@
 {
   "name": "pitch-scroll",
   "version": "0.1.0",
-  "private": true,
+  "description": "30 minutes to understand. 5 minutes to pitch. A focused learning and content-creation workspace for technology deep-dives.",
+  "license": "MIT",
+  "author": "Jayant Olhyan <jayantolhyan@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JayantOlhyan/pitch-scroll.git"
+  },
+  "homepage": "https://github.com/JayantOlhyan/pitch-scroll#readme",
+  "bugs": {
+    "url": "https://github.com/JayantOlhyan/pitch-scroll/issues"
+  },
+  "keywords": [
+    "learning",
+    "tech-education",
+    "pitch",
+    "feynman-technique",
+    "nextjs",
+    "react",
+    "timer",
+    "workspace",
+    "open-source"
+  ],
   "engines": {
     "node": ">=20.0.0"
   },
