@@ -1,0 +1,17 @@
+{
+  "name": "30 MINUTE — Research & Pitch Workspace",
+  "short_name": "30 MINUTE",
+  "description": "One unfamiliar subject. Thirty minutes to research. Five minutes to pitch.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090c0c",
+  "theme_color": "#090c0c",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
