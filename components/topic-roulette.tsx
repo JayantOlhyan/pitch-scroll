@@ -656,7 +656,7 @@ export function TopicRoulette({
           )}
 
           {isSpinning && (
-            <div className="roulette-status-indicator mono">
+            <div className="roulette-status-indicator mono" role="status" aria-live="assertive">
               <span className="ticking-indicator" />
               <span>HIGH SPEED SELECTOR DECELERATING…</span>
             </div>
@@ -666,7 +666,7 @@ export function TopicRoulette({
 
       {/* Cinematic Final Reveal Card (Appears after roulette lands) */}
       {revealed && winner && (
-        <div className="cinematic-reveal-panel">
+        <div className="cinematic-reveal-panel" role="region" aria-live="polite" aria-label="Selected challenge">
           <div className="reveal-badge-strip">
             <span className="mono orange">30 MINUTE TEST #{number(winner.number)}</span>
             <span className="reveal-divider">/</span>
