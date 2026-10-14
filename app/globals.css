@@ -78,7 +78,8 @@ select:focus-visible,
 textarea:focus-visible,
 summary:focus-visible {
   outline: 2px solid var(--orange);
-  outline-offset: 4px;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(255, 100, 44, 0.28);
 }
 
 ::selection {
