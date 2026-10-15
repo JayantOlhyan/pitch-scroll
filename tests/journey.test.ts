@@ -188,3 +188,21 @@ test('delete unfinished session removes it from sessions and clears activeId', (
   assert.equal(state.activeId, null);
   assert.doesNotThrow(() => stateSchema.parse(state));
 });
+
+test('open source repository assets and package manifest are valid', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+
+  assert.ok(fs.existsSync(path.resolve('LICENSE')), 'LICENSE file must exist');
+  assert.ok(fs.existsSync(path.resolve('CONTRIBUTING.md')), 'CONTRIBUTING.md file must exist');
+  assert.ok(fs.existsSync(path.resolve('CODE_OF_CONDUCT.md')), 'CODE_OF_CONDUCT.md file must exist');
+  assert.ok(fs.existsSync(path.resolve('SECURITY.md')), 'SECURITY.md file must exist');
+  assert.ok(fs.existsSync(path.resolve('public/manifest.json')), 'manifest.json must exist');
+  assert.ok(fs.existsSync(path.resolve('public/robots.txt')), 'robots.txt must exist');
+
+  const pkg = JSON.parse(fs.readFileSync(path.resolve('package.json'), 'utf-8'));
+  assert.equal(pkg.license, 'MIT');
+  assert.ok(pkg.repository && pkg.repository.url);
+  assert.ok(pkg.description && pkg.description.length > 10);
+});
+
