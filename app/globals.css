@@ -43,8 +43,11 @@ body {
   color: var(--text);
   font-family: var(--sans);
   font-size: 16px;
-  line-height: 1.55;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
 }
 
 a {
@@ -99,27 +102,32 @@ h1,
 h2,
 h3,
 h4 {
-  line-height: 1.15;
-  letter-spacing: -0.035em;
+  line-height: 1.18;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
 }
 
 h1 {
   font-size: clamp(2.8rem, 5vw, 4.8rem);
   font-weight: 800;
+  letter-spacing: -0.04em;
 }
 
 h2 {
   font-size: 1.9rem;
   font-weight: 700;
+  letter-spacing: -0.025em;
 }
 
 h3 {
   font-size: 1.05rem;
   font-weight: 600;
+  letter-spacing: -0.015em;
 }
 
 p {
   color: var(--muted);
+  text-wrap: pretty;
 }
 
 input,
