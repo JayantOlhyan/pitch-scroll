@@ -372,20 +372,28 @@ export function Workspace({ session: s }: { session: Session }) {
         <section className="editor-panel">
           {pitch ? (
             <div className="pitch-objectives">
-              <p className="eyebrow">THE 7 PITCH BEATS</p>
+              <div className="row between pitch-objectives-header">
+                <p className="eyebrow" style={{ marginBottom: 0 }}>THE 7 PITCH BEATS</p>
+                <span className="mono pitch-timing-legend">5:00 PACING GUIDE</span>
+              </div>
               {[
-                ['01', 'Problem', 'Who suffers, what is broken, and why does this exist?'],
-                ['02', 'Solution', 'What does the product actually do in simple terms?'],
-                ['03', 'How It Works', 'The user workflow and the underlying mechanics.'],
-                ['04', 'Technology & Architecture', 'Key technical decisions, data flow, and trade-offs.'],
-                ['05', 'Business Model', 'Who pays, pricing model, and cost to deliver.'],
-                ['06', 'Competition & Moat', 'What alternatives exist and why is this hard to clone?'],
-                ['07', 'Your Verdict & Insight', 'The single non-obvious takeaway that matters.'],
-              ].map(([idx, title, desc]) => (
+                ['01', 'Problem', '00:00–00:40', '40s', 'Who suffers, what is broken, and why does this exist?'],
+                ['02', 'Solution', '00:40–01:15', '35s', 'What does the product actually do in simple terms?'],
+                ['03', 'How It Works', '01:15–02:00', '45s', 'The user workflow and the underlying mechanics.'],
+                ['04', 'Technology & Architecture', '02:00–03:00', '60s', 'Key technical decisions, data flow, and trade-offs.'],
+                ['05', 'Business Model', '03:00–03:45', '45s', 'Who pays, pricing model, and cost to deliver.'],
+                ['06', 'Competition & Moat', '03:45–04:20', '35s', 'What alternatives exist and why is this hard to clone?'],
+                ['07', 'Your Verdict & Insight', '04:20–05:00', '40s', 'The single non-obvious takeaway that matters.'],
+              ].map(([idx, title, timeRange, duration, desc]) => (
                 <div key={title} className="beat-card">
                   <span className="mono orange beat-idx">{idx}</span>
-                  <div>
-                    <strong>{title}</strong>
+                  <div className="beat-body">
+                    <div className="row between beat-top">
+                      <strong>{title}</strong>
+                      <span className="beat-timing-tag mono" title={`Target duration: ${duration}`}>
+                        {timeRange}
+                      </span>
+                    </div>
                     <p className="beat-desc">{desc}</p>
                   </div>
                 </div>
