@@ -3065,12 +3065,48 @@ kbd {
   max-width: 580px;
 }
 
+.pitch-objectives-header {
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.pitch-timing-legend {
+  font-size: 10px;
+  color: var(--orange);
+  background: rgba(255, 100, 44, 0.12);
+  border: 1px solid rgba(255, 100, 44, 0.25);
+  padding: 3px 8px;
+  border-radius: 3px;
+  letter-spacing: 0.08em;
+}
+
 .beat-card {
   display: flex;
   gap: 18px;
   align-items: flex-start;
   padding: 16px 0;
   border-bottom: 1px solid var(--line);
+}
+
+.beat-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.beat-top {
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 3px;
+}
+
+.beat-timing-tag {
+  font-size: 11px;
+  color: #798b84;
+  background: #111815;
+  border: 1px solid #23302b;
+  padding: 1px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
 }
 
 .beat-idx {
