@@ -10,6 +10,17 @@ import { contentAssets, renderResult, shareToken } from '@/lib/sharing';
 import { Badge, number, SourceList, Modal } from './ui';
 import { getCategoryStyle } from './topic-roulette';
 
+const scoreGuidance: Record<string, string> = {
+  'Problem Understanding': 'Clarity on who hurts, the severity of the problem, and why legacy tools fail.',
+  'Product Understanding': 'Understanding user workflows, feature surface area, and friction points.',
+  'Technical Understanding': 'Deep grasp of architecture, data flow, protocols, and implementation choices.',
+  'Business Understanding': 'Grasp of unit economics, pricing models, gross margins, and cost drivers.',
+  'Competition Understanding': 'Knowledge of alternatives, tradeoffs, and switching costs.',
+  Clarity: 'Coherent mental model free of buzzwords, hand-waving, or ambiguity.',
+  'Pitch Delivery': 'Pacing, narrative arc, confidence, and punchiness within the 5-minute limit.',
+  'Original Insight': 'A non-obvious synthesis or thesis formed beyond company marketing material.',
+};
+
 export function Assessment({ session: s }: { session: Session }) {
   const { editSession, play } = useApp();
   const [retakeModal, setRetakeModal] = useState(false);
@@ -61,8 +72,8 @@ export function Assessment({ session: s }: { session: Session }) {
             </div>
             {scoreLabels.map((label, i) => (
               <label className="score-input" key={label}>
-                <span>
-                  {label}
+                <div className="row between score-label-row">
+                  <span className="score-dimension-name">{label}</span>
                   <span className="score-value-meta">
                     <span className="score-level-text mono">
                       {s.scores[i] >= 9
@@ -78,13 +89,15 @@ export function Assessment({ session: s }: { session: Session }) {
                       <small>/10</small>
                     </strong>
                   </span>
-                </span>
+                </div>
+                <p className="score-dimension-hint">{scoreGuidance[label]}</p>
                 <input
                   type="range"
                   min="1"
                   max="10"
                   step="1"
                   value={s.scores[i]}
+                  aria-label={`${label} rating`}
                   onChange={(e) =>
                     editSession(s.id, (x) => ({
                       ...x,

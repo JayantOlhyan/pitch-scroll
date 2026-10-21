@@ -2783,6 +2783,24 @@ main {
   border-radius: 3px;
 }
 
+.score-label-row {
+  align-items: baseline;
+  width: 100%;
+}
+
+.score-dimension-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #fff;
+}
+
+.score-dimension-hint {
+  font-size: 11px;
+  color: #7d8f88;
+  margin: 3px 0 8px;
+  line-height: 1.4;
+}
+
 .timer {
   font-size: clamp(4.2rem, 7vw, 6.8rem);
   line-height: 1.15;
