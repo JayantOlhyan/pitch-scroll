@@ -120,6 +120,35 @@ export function Library({ initialCategory = '' }: { initialCategory?: string }) 
             </div>
           </div>
 
+          <div className="filter-legend difficulty-legend">
+            <h4 className="mono muted">Difficulty Guide</h4>
+            <div className="difficulty-legend-list">
+              {[
+                { level: 'Easy', color: '#34d399', desc: 'Accessible products & architectures' },
+                { level: 'Medium', color: '#facc15', desc: 'Developer platforms & pipelines' },
+                { level: 'Hard', color: '#fb923c', desc: 'Distributed systems & storage engines' },
+                { level: 'Insane', color: '#f87171', desc: 'Low-level protocols, kernels & CVEs' },
+              ].map((d) => {
+                const active = difficulty === d.level;
+                return (
+                  <button
+                    key={d.level}
+                    type="button"
+                    className={`difficulty-legend-row ${active ? 'active' : ''}`}
+                    onClick={() => setDifficulty(active ? '' : d.level)}
+                    title={`Filter by ${d.level}: ${d.desc}`}
+                  >
+                    <div className="row" style={{ gap: 6, alignItems: 'center' }}>
+                      <span className="legend-dot" style={{ backgroundColor: d.color }} />
+                      <strong className="mono">{d.level}</strong>
+                    </div>
+                    <span className="difficulty-desc">{d.desc}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           <button
             className="quiet"
             onClick={() => {
