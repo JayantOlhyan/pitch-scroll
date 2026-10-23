@@ -1472,6 +1472,45 @@ main {
   flex-shrink: 0;
 }
 
+.difficulty-legend-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.difficulty-legend-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+  width: 100%;
+}
+
+.difficulty-legend-row:hover,
+.difficulty-legend-row.active {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--line-light);
+}
+
+.difficulty-legend-row strong {
+  font-size: 11px;
+  color: #fff;
+}
+
+.difficulty-desc {
+  font-size: 10px;
+  color: #72857d;
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
 .filter-note {
   border-top: 1px solid var(--line);
   padding-top: 24px;
