@@ -140,7 +140,18 @@ export function Dashboard() {
             <Calendar size={18} className="orange" />
             <h2>Show up. Stay curious.</h2>
           </div>
-          <span className="mono muted">Last 8 weeks</span>
+          <div className="row" style={{ gap: 12, alignItems: 'center' }}>
+            <span className="mono orange">
+              {stats.complete.filter((s) => days.includes(dateKey(s.completedAt!))).length} completed in window
+            </span>
+            <span className="mono muted">Last 8 weeks</span>
+          </div>
+        </div>
+
+        <div className="activity-timeline-axis mono">
+          <span>8 WEEKS AGO</span>
+          <span>4 WEEKS AGO</span>
+          <span>THIS WEEK</span>
         </div>
 
         <div className="activity-grid">
