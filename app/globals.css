@@ -3696,11 +3696,21 @@ blockquote {
   color: #fff;
 }
 
+.activity-timeline-axis {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #72857c;
+  letter-spacing: 0.08em;
+  margin-top: 20px;
+  padding: 0 2px;
+}
+
 .activity-grid {
   display: grid;
   grid-template-columns: repeat(28, 1fr);
   gap: 6px;
-  margin: 24px 0 15px;
+  margin: 10px 0 15px;
 }
 
 .activity-grid > div {
