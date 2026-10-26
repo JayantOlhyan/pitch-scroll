@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Check, Copy, Download, Shuffle, RotateCcw } from 'lucide-react';
+import { Check, Copy, Download, Shuffle, RotateCcw, FileText } from 'lucide-react';
 import { useApp } from '@/hooks/use-app';
 import { Session, scoreLabels, reflectionLabels } from '@/types';
 import { formatTime, score, restartPitch } from '@/lib/engine';
-import { contentAssets, renderResult, shareToken } from '@/lib/sharing';
+import { contentAssets, renderResult, shareToken, exportMarkdownStudySheet } from '@/lib/sharing';
 import { Badge, number, SourceList, Modal } from './ui';
 import { getCategoryStyle } from './topic-roulette';
 
@@ -327,6 +327,24 @@ export function Results({ session: s, shared = false }: { session: Session; shar
               }
             >
               <Download size={16} /> Download result card
+            </button>
+
+            <button
+              className="button"
+              type="button"
+              onClick={() => {
+                const md = exportMarkdownStudySheet(s);
+                const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `30-minute-${s.challenge.slug}-study-sheet.md`;
+                a.click();
+                URL.revokeObjectURL(url);
+                setMessage('Markdown study sheet downloaded.');
+              }}
+            >
+              <FileText size={16} /> Export Markdown
             </button>
 
             <button

@@ -230,3 +230,43 @@ export function contentAssets(s: Session) {
     ],
   ];
 }
+
+export function exportMarkdownStudySheet(s: Session): string {
+  const c = s.challenge;
+  const sectionsList = Object.entries(s.notes)
+    .filter(([_, v]) => v.trim().length > 0)
+    .map(([sec, text]) => `### ${sec}\n\n${text.trim()}\n`)
+    .join('\n');
+
+  return `# 30 MINUTE: ${c.title}
+
+> **Category:** ${c.category} · **Type:** ${c.type} · **Difficulty:** ${c.difficulty}
+> **Research Time:** ${formatTime(s.researchSeconds)} | **Pitch Time:** ${formatTime(s.pitchSeconds)}
+> **Self Score:** ${score(s).toFixed(1)}/10 ${s.practice ? '(Practice Run)' : '(Official Run)'}
+
+---
+
+## Key Takeaway
+> "${s.reflections[3] || 'No key takeaway recorded.'}"
+
+---
+
+## Reflections
+1. **What did you understand that you didn't know 30 minutes ago?**
+   ${s.reflections[0] || '—'}
+
+2. **What did you get wrong?**
+   ${s.reflections[1] || '—'}
+
+3. **What would you research next?**
+   ${s.reflections[2] || '—'}
+
+---
+
+## Research Notes
+${sectionsList || '_No written notes recorded during this session._'}
+
+---
+*Created with [30 MINUTE](https://github.com/JayantOlhyan/pitch-scroll) — 30 minutes to understand. 5 minutes to pitch.*
+`;
+}
