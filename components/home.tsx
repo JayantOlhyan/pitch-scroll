@@ -192,14 +192,17 @@ export function Home() {
         <SectionTitle label="THE 30 MINUTE FORMAT" title="How the Challenge Works" />
         <div className="process-grid">
           {[
-            ['01', 'GET THE CHALLENGE', 'Spin the topic roulette. Unseen subjects take priority.'],
-            ['02', 'RESEARCH 30 MINUTES', 'Follow raw sources. Read docs. Build your architectural model.'],
-            ['03', 'CLOCK HITS ZERO', 'Close all tabs. Research immediately stops.'],
-            ['04', 'PITCH 5 MINUTES', 'Turn on the camera. Deliver a concise explanation in your own words.'],
-            ['05', 'REFLECT & SCORE', 'Grade your technical clarity, identify gaps, and publish your takeaway.'],
-          ].map(([n, t, d]) => (
+            ['01', 'GET THE CHALLENGE', 'Instant', 'Spin the topic roulette. Unseen subjects and edge-case architectures take priority.'],
+            ['02', 'RESEARCH 30 MINUTES', '30:00', 'Explore raw primary sources, RFCs, and engineering blogs to build your architectural mental model.'],
+            ['03', 'CLOCK HITS ZERO', 'Hard Stop', 'Close all research tabs immediately. No secondary research is allowed past the countdown.'],
+            ['04', 'PITCH 5 MINUTES', '05:00', 'Turn on your camera. Deliver a concise, jargon-free explanation from memory and notes.'],
+            ['05', 'REFLECT & SCORE', 'Rubric', 'Rate your understanding across 8 dimensions, capture gaps, and export your scorecard.'],
+          ].map(([n, t, tag, d]) => (
             <div key={n} className="process-step-card">
-              <span className="process-number mono">{n}</span>
+              <div className="row between" style={{ alignItems: 'baseline', marginBottom: 12 }}>
+                <span className="process-number mono">{n}</span>
+                <span className="mono orange" style={{ fontSize: 10, letterSpacing: '0.08em' }}>{tag}</span>
+              </div>
               <h3>{t}</h3>
               <p>{d}</p>
             </div>
