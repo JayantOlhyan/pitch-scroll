@@ -1653,6 +1653,28 @@ main {
   font-weight: 450;
 }
 
+.roulette-selection-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  color: #798b84;
+  letter-spacing: 0.08em;
+  margin-top: 14px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.selection-legend-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 6px rgba(255, 100, 44, 0.6);
+}
+
 .roulette-controls-bar {
   display: flex;
   flex-direction: column;

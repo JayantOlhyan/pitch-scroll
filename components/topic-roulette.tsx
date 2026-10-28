@@ -389,6 +389,15 @@ export function TopicRoulette({
             ? 'Your 30-minute deep-dive study challenge. Connect the dots and form your mental model.'
             : '30 minutes to study, understand, and break down a real-world system.'}
         </p>
+
+        {!revealed && (
+          <div className="roulette-selection-legend mono">
+            <span className="selection-legend-dot" />
+            <span>PRIORITIZING UNEXPLORED TOPICS</span>
+            <span className="dot-sep">·</span>
+            <span>ZERO REPEAT BIAS</span>
+          </div>
+        )}
       </div>
 
       {/* Filter Toolbar (Visible when not spinning and not revealed) */}
