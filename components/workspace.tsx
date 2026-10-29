@@ -58,6 +58,7 @@ export function Workspace({ session: s }: { session: Session }) {
   const [resetModal, setResetModal] = useState(false);
   const [shortcutModal, setShortcutModal] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
+  const [teleprompterSize, setTeleprompterSize] = useState<'normal' | 'large' | 'xl'>('normal');
 
   const p = state.preferences;
   const pitch = s.phase === 'pitch';
@@ -317,7 +318,7 @@ export function Workspace({ session: s }: { session: Session }) {
             {pitch ? '01 Problem · 02 Solution · 03 Tech · 04 Business · 05 Verdict' : tab}
           </span>
         </div>
-        <div className="record-notes">
+        <div className={`record-notes teleprompter-${teleprompterSize}`}>
           {s.notes[pitch ? 'Pitch Notes' : tab] ||
             s.notes['Pitch Notes'] ||
             s.notes['Problem'] ||
@@ -453,6 +454,19 @@ export function Workspace({ session: s }: { session: Session }) {
             <>
               <div className="row between">
                 <h3>Pitch Talking Points</h3>
+                <div className="teleprompter-size-controls" role="group" aria-label="Teleprompter font size">
+                  {(['normal', 'large', 'xl'] as const).map((sz) => (
+                    <button
+                      key={sz}
+                      type="button"
+                      className={`teleprompter-btn ${teleprompterSize === sz ? 'active' : ''}`}
+                      onClick={() => setTeleprompterSize(sz)}
+                      title={`Scale teleprompter font: ${sz}`}
+                    >
+                      {sz === 'normal' ? '1x' : sz === 'large' ? '1.5x' : '2x'}
+                    </button>
+                  ))}
+                </div>
                 <span className="saved">
                   <i /> Autosaved
                 </span>
@@ -462,7 +476,7 @@ export function Workspace({ session: s }: { session: Session }) {
               </label>
               <textarea
                 id="pitch-note"
-                className="pitch-textarea"
+                className={`pitch-textarea teleprompter-${teleprompterSize}`}
                 value={s.notes[noteKey] || ''}
                 placeholder="Draft your bullet points for the 5-minute pitch…"
                 onChange={(e) =>
