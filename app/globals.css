@@ -3861,6 +3861,44 @@ blockquote {
 }
 
 /* Admin */
+.admin-stats-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.admin-stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #111a17;
+  border: 1px solid #23342c;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+.admin-stat-icon {
+  color: #72a386;
+}
+
+.admin-stat-label {
+  color: #8b9b90;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-stat-val {
+  color: #e5ede7;
+  font-weight: 700;
+}
+
+.admin-stat-val.highlight {
+  color: #6ed39e;
+}
+
 .admin-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
