@@ -149,6 +149,7 @@ export function Workspace({ session: s }: { session: Session }) {
           <button
             className={`quiet toolbar-btn ${fullscreen ? 'active' : ''}`}
             onClick={toggleFullscreen}
+            aria-keyshortcuts="Shift+F"
             title="Toggle full screen window (Hotkey: Shift+F)"
           >
             {fullscreen ? <Shrink size={15} /> : <Expand size={15} />}
@@ -159,6 +160,7 @@ export function Workspace({ session: s }: { session: Session }) {
           <button
             className={`quiet toolbar-btn ${p.cinematic ? 'active' : ''}`}
             onClick={toggleCinematic}
+            aria-keyshortcuts="F"
             title="Toggle distraction-free cinematic mode (Hotkey: F)"
           >
             <Film size={15} />
@@ -196,6 +198,7 @@ export function Workspace({ session: s }: { session: Session }) {
           <button
             className="quiet toolbar-btn"
             onClick={() => editSession(s.id, (x) => pause(advance(x)))}
+            aria-keyshortcuts="Space"
             title="Pause timer (Marks attempt as practice)"
           >
             {s.pausedAt ? <Play size={16} /> : <Pause size={16} />}
@@ -207,6 +210,7 @@ export function Workspace({ session: s }: { session: Session }) {
             className="quiet toolbar-btn"
             onClick={() => setShortcutModal(true)}
             aria-label="Keyboard shortcuts legend"
+            aria-keyshortcuts="?"
             title="Keyboard shortcuts legend (Hotkey: ?)"
           >
             <HelpCircle size={15} />
@@ -217,6 +221,7 @@ export function Workspace({ session: s }: { session: Session }) {
           <button
             className="quiet toolbar-btn"
             onClick={() => setResetModal(true)}
+            aria-keyshortcuts="R"
             title={pitch ? 'Reset 5-minute pitch timer to 05:00' : 'Reset research timer to 30:00'}
           >
             <RotateCcw size={15} />

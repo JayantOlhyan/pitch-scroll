@@ -67,6 +67,7 @@ export function SoundControls() {
           play('click');
         }}
         aria-label={p.sound ? 'Mute sound' : 'Enable sound'}
+        aria-keyshortcuts="M"
         title="Toggle procedural audio (Hotkey: M)"
       >
         {p.sound ? <Volume2 size={16} /> : <VolumeX size={16} />}
@@ -297,6 +298,8 @@ export function Modal({
   return (
     <dialog
       ref={ref}
+      aria-modal="true"
+      aria-label={title}
       onCancel={onClose}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
