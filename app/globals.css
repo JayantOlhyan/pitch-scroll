@@ -4106,3 +4106,65 @@ dialog > p {
     scroll-behavior: auto !important;
   }
 }
+
+/* Print Stylesheet for Physical Study Sheets & PDF Archiving */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #111111 !important;
+    font-size: 11pt !important;
+  }
+
+  .app-header,
+  .footer,
+  .actions,
+  .sound-controls,
+  .theme-toggle,
+  .toolbar-right,
+  .nav-pills,
+  .export-actions,
+  .share-bar,
+  .button,
+  .banner,
+  dialog {
+    display: none !important;
+  }
+
+  .page {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .results-card,
+  .panel,
+  .study-sheet,
+  .read-note {
+    background: #ffffff !important;
+    color: #111111 !important;
+    border: 1px solid #cccccc !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 12pt;
+    padding: 12pt !important;
+  }
+
+  h1, h2, h3, h4 {
+    color: #000000 !important;
+    page-break-after: avoid;
+  }
+
+  p, span, strong, td, th {
+    color: #222222 !important;
+  }
+
+  .badge,
+  .rubric-pill,
+  .dimension-pill {
+    background: #f0f0f0 !important;
+    color: #111111 !important;
+    border: 1px solid #bbbbbb !important;
+  }
+}
+
