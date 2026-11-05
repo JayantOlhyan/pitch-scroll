@@ -18,7 +18,7 @@ import {
   stateSchema,
   sessionSchema,
 } from '../lib/storage';
-import { decodeShare, shareToken, contentAssets } from '../lib/sharing';
+import { decodeShare, shareToken, contentAssets, exportMarkdownStudySheet } from '../lib/sharing';
 import { sections, scoreLabels, reflectionLabels } from '../types';
 
 test('complete user journey test: roulette selection -> 30:00 research -> 05:00 pitch -> assessment -> result card', () => {
@@ -197,12 +197,41 @@ test('open source repository assets and package manifest are valid', async () =>
   assert.ok(fs.existsSync(path.resolve('CONTRIBUTING.md')), 'CONTRIBUTING.md file must exist');
   assert.ok(fs.existsSync(path.resolve('CODE_OF_CONDUCT.md')), 'CODE_OF_CONDUCT.md file must exist');
   assert.ok(fs.existsSync(path.resolve('SECURITY.md')), 'SECURITY.md file must exist');
+  assert.ok(fs.existsSync(path.resolve('ARCHITECTURE.md')), 'ARCHITECTURE.md file must exist');
+  assert.ok(fs.existsSync(path.resolve('ROADMAP.md')), 'ROADMAP.md file must exist');
   assert.ok(fs.existsSync(path.resolve('public/manifest.json')), 'manifest.json must exist');
   assert.ok(fs.existsSync(path.resolve('public/robots.txt')), 'robots.txt must exist');
+
+  const archContent = fs.readFileSync(path.resolve('ARCHITECTURE.md'), 'utf-8');
+  assert.ok(archContent.length > 500, 'ARCHITECTURE.md must contain comprehensive architecture documentation');
+
+  const roadmapContent = fs.readFileSync(path.resolve('ROADMAP.md'), 'utf-8');
+  assert.ok(roadmapContent.length > 300, 'ROADMAP.md must contain roadmap documentation');
 
   const pkg = JSON.parse(fs.readFileSync(path.resolve('package.json'), 'utf-8'));
   assert.equal(pkg.license, 'MIT');
   assert.ok(pkg.repository && pkg.repository.url);
   assert.ok(pkg.description && pkg.description.length > 10);
+});
+
+test('markdown study sheet export generates structured post-mortem document', () => {
+  const c = challenges[0];
+  const s = createSession(c, 1, 1000);
+  s.phase = 'complete';
+  s.notes['Problem'] = 'Need fast local consensus without central coordinator.';
+  s.notes['Solution'] = 'Gossip-based membership with bounded convergence time.';
+  s.scores = [9, 8, 9, 8, 7, 9, 8, 9];
+  s.reflections = [
+    'Learned protocol tradeoffs',
+    'Underestimated network latency',
+    'Study compaction next',
+    'Simple primitives win',
+  ];
+  const md = exportMarkdownStudySheet(s);
+  assert.ok(md.includes(`# 30 MINUTE: ${c.title}`));
+  assert.ok(md.includes('Need fast local consensus'));
+  assert.ok(md.includes('Gossip-based membership'));
+  assert.ok(md.includes('Learned protocol tradeoffs'));
+  assert.ok(md.includes('> **Self Score:** 8.4/10'));
 });
 
