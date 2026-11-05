@@ -4,7 +4,7 @@
   <a href="https://github.com/JayantOlhyan/pitch-scroll/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-orange.svg" alt="License: MIT" /></a>
   <img src="https://img.shields.io/badge/TypeScript-5.9-blue.svg" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Next.js-16.3-black.svg" alt="Next.js" />
-  <img src="https://img.shields.io/badge/Tests-33%20Passing-brightgreen.svg" alt="Tests" />
+  <img src="https://img.shields.io/badge/Tests-34%20Passing-brightgreen.svg" alt="Tests" />
   <img src="https://img.shields.io/badge/Storage-100%25%20Local--First-teal.svg" alt="Local-First" />
 </p>
 
@@ -29,13 +29,31 @@ A personal technology-learning, content-creation, and research workstation. You 
 
 - **177 Curated Technical Case Studies:** Spanning Artificial Intelligence, Developer Tools, Distributed Systems, Cloud Infrastructure, Open Source, Indian Tech, System Architecture, Dead Products, and Cybersecurity.
 - **Fail-Safe Timer Engine:** Timestamp-anchored timer that survives page reloads, tab switches, and mobile backgrounding without losing synchronization.
+- **Teleprompter Font Scaling Controls:** High-visibility pitch notes scaling (`1x`, `1.5x`, `2x`) allowing effortless script delivery while looking into the camera.
 - **Distraction-Free Cinematic & Recording Modes:**
   - **Cinematic Mode (<kbd>F</kbd>):** Fullscreen distraction-free workstation with enlarged timer and high-contrast typography.
   - **16:9 Landscape Mode:** Tailored for desktop webcams, YouTube videos, and screen recordings.
   - **9:16 Vertical Mode:** Custom composition engineered specifically for filming vertical Instagram Reels and YouTube Shorts.
 - **Procedural Web Audio Sound Engine:** Cinematic synthesizer pulses marking countdown starts, 10m/5m/1m/30s warnings, phase transitions, and completions.
 - **100% Client-Side Privacy:** All sessions, notes, checklists, and scores persist locally via `localStorage`. Full JSON export and backup restoration included.
-- **Content Creator Toolkit:** Automatically formats YouTube titles, video hooks, Reel openers, and LinkedIn post drafts from session takeaways.
+- **Content Creator & Study Toolkit:**
+  - Automatically formats YouTube titles, video hooks, Reel openers, and LinkedIn post drafts from session takeaways.
+  - One-click export of structured **Markdown Study Sheets** for GitHub post-mortems and engineering portfolios.
+  - Print-ready and PDF stylesheet (`@media print`) for clean physical 1-page reference summaries.
+
+---
+
+## 📋 Status & Milestones
+
+- [x] **Phase 1: Open Source Workstation & Engine (Completed)**
+  - 177+ structured technical case studies with verified primary sources
+  - Resilient timestamp-based monotonic countdown engine
+  - Procedural Web Audio API sound synthesizer
+  - Multi-tier teleprompter font scaling and distraction-free cinematic views
+  - Unicode scorecard, Markdown study sheet, and canvas PNG generation
+  - WCAG-compliant keyboard accessibility and print stylesheet
+- [ ] **Phase 2: Local Audio Recording & Offline Transcription (Planned)**
+  - See [ROADMAP.md](./ROADMAP.md) for full phase plans and upcoming milestones.
 
 ---
 
@@ -56,9 +74,11 @@ A personal technology-learning, content-creation, and research workstation. You 
 
 ## 🏗 Architecture & Stack
 
+For in-depth architectural details, state reconciliation guarantees, and Web Audio design patterns, see [ARCHITECTURE.md](./ARCHITECTURE.md).
+
 - **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript 5.9 (Strict mode)
-- **Styling**: Tailwind CSS + Custom CSS Design Tokens
+- **Styling**: Tailwind CSS + Custom CSS Design Tokens + `@media print`
 - **Icons**: Lucide Icons
 - **Storage**: Client-side `localStorage` with Zod validation schemas
 - **Audio**: Web Audio API Procedural Synthesizer
